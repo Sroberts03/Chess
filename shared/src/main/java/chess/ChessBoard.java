@@ -1,5 +1,7 @@
 package chess;
 
+import static chess.ChessPiece.*;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,8 +10,10 @@ package chess;
  */
 public class ChessBoard {
 
+    public ChessPiece[][] array;
+
     public ChessBoard() {
-        
+        array = new ChessPiece[8][8];
     }
 
     /**
@@ -19,7 +23,9 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        int column = position.getColumn();
+        int row = position.getRow();
+        array[row][column] = piece;
     }
 
     /**
@@ -30,7 +36,9 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        int column = position.getColumn();
+        int row = position.getRow();
+        return array[row][column];
     }
 
     /**
@@ -38,6 +46,12 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        for (int i = 3; i < 7; i++) {
+            for (int j = 0; j < 8; j++) {
+                array[i][j] = null;
+            }
+        }
+
+
     }
 }
