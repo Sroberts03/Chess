@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -52,26 +51,23 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        PieceType pieceType = getPieceType();
-        ArrayList<ChessMove> moves = new ArrayList<>();
         if (pieceType == PieceType.KING) {
-            return moves;
+            return PieceMovesCalculator.KingMoveCalculator(board, myPosition);
         }
         if (pieceType == PieceType.QUEEN) {
-            return moves;
+            return PieceMovesCalculator.QueenMoveCalculator(board, myPosition);
         }
         if (pieceType == PieceType.BISHOP) {
-            return moves;
+            return PieceMovesCalculator.BishopMoveCalculator(board, myPosition);
         }
         if (pieceType == PieceType.KNIGHT) {
-            return moves;
+            return PieceMovesCalculator.KnightMoveCalculator(board, myPosition);
         }
         if (pieceType == PieceType.ROOK) {
-            return moves;
+            return PieceMovesCalculator.RookMoveCalculator(board, myPosition);
         }
         if (pieceType == PieceType.PAWN) {
-            return moves;
+            return PieceMovesCalculator.PawnMoveCalculator(board, myPosition);
         }
-        return moves;
     }
 }
