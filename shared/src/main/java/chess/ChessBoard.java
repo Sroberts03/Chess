@@ -51,7 +51,33 @@ public class ChessBoard {
                 array[i][j] = null;
             }
         }
+        ResetBoardHelper();
+    }
 
-
+    public void ResetBoardHelper() {
+        ChessPiece[] PieceOrderWhite = {new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KNIGHT),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.BISHOP),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.QUEEN),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KING),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.BISHOP),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KNIGHT),
+                new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK)};
+        ChessPiece[] PieceOrderBlack = {new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.QUEEN),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KING),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
+                new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.ROOK)};
+        for (int i = 0; i < 8; i++) {
+            array[0][i] = PieceOrderWhite[i];
+            array[7][i] = PieceOrderBlack[i];
+        }
+        for (int i = 0; i < 8; i++) {
+            array[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN);
+            array[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN);
+        }
     }
 }
