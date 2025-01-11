@@ -1,7 +1,5 @@
 package chess;
 
-import java.lang.reflect.Array;
-
 import static chess.ChessPiece.*;
 
 /**
@@ -58,12 +56,12 @@ public class ChessBoard {
 
     private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
         for (int i = 0; i < 8; i++) {
-            array[0][i] = list_of_White[i];
-            array[7][i] = list_of_Black[i];
+            addPiece(new ChessPosition(0, i), list_of_White[i]);
+            addPiece(new ChessPosition(7, i), list_of_Black[i]);
         }
         for (int i = 0; i < 8; i++) {
-            array[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN);
-            array[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN);
+            addPiece(new ChessPosition(1, i), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
+            addPiece(new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
         }
     }
 
