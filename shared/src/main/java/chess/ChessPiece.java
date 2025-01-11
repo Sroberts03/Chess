@@ -69,5 +69,6 @@ public class ChessPiece {
         if (pieceType == PieceType.PAWN) {
             return PieceMovesCalculator.PawnMoveCalculator(board, myPosition);
         }
+        return java.util.List.of();
     }
 }
