@@ -1,5 +1,7 @@
 package chess;
 
+import java.lang.reflect.Array;
+
 import static chess.ChessPiece.*;
 
 /**
@@ -51,11 +53,22 @@ public class ChessBoard {
                 array[i][j] = null;
             }
         }
-        ResetBoardHelper();
+        ResetBoardHelper(PieceOrderWhite(), PieceOrderBlack());
     }
 
-    public void ResetBoardHelper() {
-        ChessPiece[] PieceOrderWhite = {new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
+    private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
+        for (int i = 0; i < 8; i++) {
+            array[0][i] = list_of_White[i];
+            array[7][i] = list_of_Black[i];
+        }
+        for (int i = 0; i < 8; i++) {
+            array[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN);
+            array[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN);
+        }
+    }
+
+    private ChessPiece[] PieceOrderWhite() {
+        return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.QUEEN),
@@ -63,7 +76,10 @@ public class ChessBoard {
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK)};
-        ChessPiece[] PieceOrderBlack = {new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
+    }
+
+    private ChessPiece[] PieceOrderBlack() {
+        return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.QUEEN),
@@ -71,13 +87,5 @@ public class ChessBoard {
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.ROOK)};
-        for (int i = 0; i < 8; i++) {
-            array[0][i] = PieceOrderWhite[i];
-            array[7][i] = PieceOrderBlack[i];
-        }
-        for (int i = 0; i < 8; i++) {
-            array[1][i] = new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN);
-            array[6][i] = new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN);
-        }
     }
 }
