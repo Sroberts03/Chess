@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import static chess.ChessPiece.*;
 
 /**
@@ -26,6 +29,20 @@ public class ChessBoard {
         int column = position.getColumn();
         int row = position.getRow();
         array[row-1][column-1] = piece;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) o;
+        return Objects.deepEquals(array, that.array);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(array);
     }
 
     /**
@@ -56,12 +73,12 @@ public class ChessBoard {
 
     private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(1, i+1), list_of_White[i]);
-            addPiece(new ChessPosition(8, i+1), list_of_Black[i]);
+            addPiece(new ChessPosition(1, i+1), list_of_Black[i]);
+            addPiece(new ChessPosition(8, i+1), list_of_White[i]);
         }
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
-            addPiece(new ChessPosition(8, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
+            addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
+            addPiece(new ChessPosition(8, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
         }
     }
 
