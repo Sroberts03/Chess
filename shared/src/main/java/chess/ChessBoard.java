@@ -13,7 +13,7 @@ public class ChessBoard {
     public ChessPiece[][] array;
 
     public ChessBoard() {
-        array = new ChessPiece[8][8];
+        this.array = new ChessPiece[8][8];
     }
 
     /**
