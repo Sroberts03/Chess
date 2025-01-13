@@ -25,7 +25,7 @@ public class ChessBoard {
     public void addPiece(ChessPosition position, ChessPiece piece) {
         int column = position.getColumn();
         int row = position.getRow();
-        array[row][column] = piece;
+        array[row-1][column-1] = piece;
     }
 
     /**
@@ -38,7 +38,7 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
         int column = position.getColumn();
         int row = position.getRow();
-        return array[row][column];
+        return array[row-1][column-1];
     }
 
     /**
@@ -56,12 +56,12 @@ public class ChessBoard {
 
     private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(0, i), list_of_White[i]);
-            addPiece(new ChessPosition(7, i), list_of_Black[i]);
+            addPiece(new ChessPosition(1, i+1), list_of_White[i]);
+            addPiece(new ChessPosition(8, i+1), list_of_Black[i]);
         }
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(1, i), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
-            addPiece(new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
+            addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
+            addPiece(new ChessPosition(8, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
         }
     }
 
