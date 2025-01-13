@@ -31,20 +31,6 @@ public class ChessBoard {
         array[row-1][column-1] = piece;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ChessBoard that = (ChessBoard) o;
-        return Objects.deepEquals(array, that.array);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(array);
-    }
-
     /**
      * Gets a chess piece on the chessboard
      *
@@ -102,5 +88,19 @@ public class ChessBoard {
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.ROOK)};
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) o;
+        return Objects.deepEquals(array, that.array);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(array);
     }
 }
