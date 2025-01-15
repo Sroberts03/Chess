@@ -9,7 +9,7 @@ public interface PieceMovesCalculator {
                 && (chessBoard.array[endRow][endCol] == null
                 || chessBoard.array[endRow][endCol].getTeamColor() != teamColor)) {
             ChessPosition newPosition = new ChessPosition(endRow + 1, endCol + 1);
-            moves.add(new ChessMove(startPosition, newPosition, ChessPiece.PieceType.KING));
+            moves.add(new ChessMove(startPosition, newPosition, null));
         }
     }
 
