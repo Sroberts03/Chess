@@ -1,6 +1,7 @@
 package chess;
 
 import chess.MovesCalculator.KingMoveCalculator;
+import chess.MovesCalculator.KnightMoveCalculator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,10 +69,10 @@ public class ChessPiece {
 //            PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor, moves);
 //            return moves;
 //        }
-//        if (pieceType == PieceType.KNIGHT) {
-//            PieceMovesCalculator.KnightMoveCalculator(board, myPosition, teamColor, moves);
-//            return moves;
-//        }
+        if (pieceType == PieceType.KNIGHT) {
+            KnightMoveCalculator.Knight_Move_Calculator(board, myPosition, moves, teamColor);
+            return moves;
+        }
 //        if (pieceType == PieceType.ROOK) {
 //            PieceMovesCalculator.RookMoveCalculator(board, myPosition, teamColor, moves);
 //            return moves;
