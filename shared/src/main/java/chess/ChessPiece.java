@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -52,23 +53,38 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        ArrayList<ChessMove> moves = new ArrayList<>();
         if (pieceType == PieceType.KING) {
-            return PieceMovesCalculator.KingMoveCalculator(board, myPosition, teamColor);
+            int startCol = myPosition.getColumn()-1;
+            int startRow = myPosition.getRow()-1;
+            int downRow = startRow - 1;
+            int upRow = startRow + 1;
+            int downCol = startCol - 1;
+            int upCol = startCol + 1;
+            PieceMovesCalculator.KingMoveHelper(downRow, startCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(upRow, startCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(startRow, downCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(startRow, upCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(downRow, downCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(downRow, upCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(upRow, upCol, board, myPosition, teamColor, moves);
+            PieceMovesCalculator.KingMoveHelper(upRow, downCol, board, myPosition, teamColor, moves);
+            return moves;
         }
         if (pieceType == PieceType.QUEEN) {
-            return PieceMovesCalculator.QueenMoveCalculator(board, myPosition, teamColor);
+            return PieceMovesCalculator.QueenMoveCalculator(board, myPosition, teamColor, moves);
         }
         if (pieceType == PieceType.BISHOP) {
-            return PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor);
+            return PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor, moves);
         }
         if (pieceType == PieceType.KNIGHT) {
-            return PieceMovesCalculator.KnightMoveCalculator(board, myPosition, teamColor);
+            return PieceMovesCalculator.KnightMoveCalculator(board, myPosition, teamColor, moves);
         }
         if (pieceType == PieceType.ROOK) {
-            return PieceMovesCalculator.RookMoveCalculator(board, myPosition, teamColor);
+            return PieceMovesCalculator.RookMoveCalculator(board, myPosition, teamColor, moves);
         }
         if (pieceType == PieceType.PAWN) {
-            return PieceMovesCalculator.PawnMoveCalculator(board, myPosition, teamColor);
+            return PieceMovesCalculator.PawnMoveCalculator(board, myPosition, teamColor, moves);
         }
         return java.util.List.of();
     }
