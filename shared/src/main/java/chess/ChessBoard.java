@@ -51,7 +51,7 @@ public class ChessBoard {
     public void resetBoard() {
         for (int i = 3; i < 7; i++) {
             for (int j = 0; j < 8; j++) {
-                array[i][j] = null;
+                addPiece(new ChessPosition(i+1, j+1), null);
             }
         }
         ResetBoardHelper(PieceOrderWhite(), PieceOrderBlack());
@@ -59,12 +59,12 @@ public class ChessBoard {
 
     private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(1, i+1), list_of_Black[i]);
-            addPiece(new ChessPosition(8, i+1), list_of_White[i]);
+            addPiece(new ChessPosition(1, i+1), list_of_White[i]);
+            addPiece(new ChessPosition(8, i+1), list_of_Black[i]);
         }
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
-            addPiece(new ChessPosition(8, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
+            addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
+            addPiece(new ChessPosition(7, i+1), new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.PAWN));
         }
     }
 
@@ -80,7 +80,7 @@ public class ChessBoard {
     }
 
     private ChessPiece[] PieceOrderBlack() {
-        return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
+        return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.ROOK),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.QUEEN),
@@ -92,9 +92,6 @@ public class ChessBoard {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
         ChessBoard that = (ChessBoard) o;
         return Objects.deepEquals(array, that.array);
     }
@@ -102,5 +99,24 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(array);
+    }
+
+    public static void printBoard(ChessBoard board) {
+        System.out.print("new board\n");
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.array[i][j] != null) {
+                    PieceType type = board.array[i][j].getPieceType();
+                    ChessGame.TeamColor teamColor = board.array[i][j].getTeamColor();
+                    System.out.print(type + "." + teamColor + " | ");
+                }
+                else if (board.array[i][j] == null) {
+                    System.out.print("NULL" + " | ");
+                }
+                if (j==7) {
+                    System.out.print("\n");
+                }
+            }
+        }
     }
 }
