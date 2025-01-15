@@ -53,22 +53,22 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         if (pieceType == PieceType.KING) {
-            return PieceMovesCalculator.KingMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.KingMoveCalculator(board, myPosition, teamColor);
         }
         if (pieceType == PieceType.QUEEN) {
-            return PieceMovesCalculator.QueenMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.QueenMoveCalculator(board, myPosition, teamColor);
         }
         if (pieceType == PieceType.BISHOP) {
-            return PieceMovesCalculator.BishopMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor);
         }
         if (pieceType == PieceType.KNIGHT) {
-            return PieceMovesCalculator.KnightMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.KnightMoveCalculator(board, myPosition, teamColor);
         }
         if (pieceType == PieceType.ROOK) {
-            return PieceMovesCalculator.RookMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.RookMoveCalculator(board, myPosition, teamColor);
         }
         if (pieceType == PieceType.PAWN) {
-            return PieceMovesCalculator.PawnMoveCalculator(board, myPosition);
+            return PieceMovesCalculator.PawnMoveCalculator(board, myPosition, teamColor);
         }
         return java.util.List.of();
     }
