@@ -4,8 +4,8 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
-
 import java.util.ArrayList;
+
 
 public class KingMoveCalculator {
 
@@ -17,22 +17,13 @@ public class KingMoveCalculator {
         int upRow = startRow + 1;
         int downCol = startCol - 1;
         int upCol = startCol + 1;
-        KingMoveCalculator.King_Move_Calculator_helper(downRow, startCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(upRow, startCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(startRow, downCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(startRow, upCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(downRow, downCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(downRow, upCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(upRow, upCol, board, myPosition, teamColor, moves);
-        KingMoveCalculator.King_Move_Calculator_helper(upRow, downCol, board, myPosition, teamColor, moves);
-    }
-
-    public static void King_Move_Calculator_helper(int endRow, int endCol, ChessBoard chessBoard, ChessPosition startPosition, ChessGame.TeamColor teamColor, ArrayList<ChessMove> moves) {
-        if (((endRow <= 7 && endRow >= 0 ) && (endCol <= 7 && endCol >= 0))
-                && (chessBoard.array[endRow][endCol] == null
-                || chessBoard.array[endRow][endCol].getTeamColor() != teamColor)) {
-            ChessPosition newPosition = new ChessPosition(endRow + 1, endCol + 1);
-            moves.add(new ChessMove(startPosition, newPosition, null));
-        }
+        MoveCalcHelper.Move_Calc_Helper(downRow, startCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(upRow, startCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(startRow, downCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(startRow, upCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(downRow, downCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(downRow, upCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(upRow, upCol, board, myPosition, teamColor, moves);
+        MoveCalcHelper.Move_Calc_Helper(upRow, downCol, board, myPosition, teamColor, moves);
     }
 }
