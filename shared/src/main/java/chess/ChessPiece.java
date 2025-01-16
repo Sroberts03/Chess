@@ -1,8 +1,6 @@
 package chess;
 
-import chess.MovesCalculator.KingMoveCalculator;
-import chess.MovesCalculator.KnightMoveCalculator;
-
+import chess.MovesCalculator.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -14,6 +12,7 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
+
     private final ChessGame.TeamColor teamColor;
     private final PieceType pieceType;
 
@@ -61,10 +60,10 @@ public class ChessPiece {
             KingMoveCalculator.King_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
-//        if (pieceType == PieceType.QUEEN) {
-//            PieceMovesCalculator.QueenMoveCalculator(board, myPosition, teamColor, moves);
-//            return moves;
-//        }
+        if (pieceType == PieceType.QUEEN) {
+            QueenMoveCalculater.Queen_Move_Calculator(board, myPosition, moves, teamColor);
+            return moves;
+        }
 //        if (pieceType == PieceType.BISHOP) {
 //            PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor, moves);
 //            return moves;
