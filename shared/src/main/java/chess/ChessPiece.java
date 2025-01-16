@@ -76,10 +76,10 @@ public class ChessPiece {
             RookMoveCalculator.Rook_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
-//        if (pieceType == PieceType.PAWN) {
-//            PieceMovesCalculator.PawnMoveCalculator(board, myPosition, teamColor, moves);
-//            return moves;
-//        }
+        if (pieceType == PieceType.PAWN) {
+            PawnMoveCalculator.Pawn_Move_Calculator(board, myPosition, moves, teamColor);
+            return moves;
+        }
         return java.util.List.of();
     }
 
