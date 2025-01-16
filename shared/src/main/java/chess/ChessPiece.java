@@ -64,10 +64,10 @@ public class ChessPiece {
             QueenMoveCalculater.Queen_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
-//        if (pieceType == PieceType.BISHOP) {
-//            PieceMovesCalculator.BishopMoveCalculator(board, myPosition, teamColor, moves);
-//            return moves;
-//        }
+        if (pieceType == PieceType.BISHOP) {
+            BishopMoveCalculator.Bishop_Move_Calculator(board, myPosition, moves, teamColor);
+            return moves;
+        }
         if (pieceType == PieceType.KNIGHT) {
             KnightMoveCalculator.Knight_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
