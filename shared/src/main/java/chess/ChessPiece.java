@@ -72,10 +72,10 @@ public class ChessPiece {
             KnightMoveCalculator.Knight_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
-//        if (pieceType == PieceType.ROOK) {
-//            PieceMovesCalculator.RookMoveCalculator(board, myPosition, teamColor, moves);
-//            return moves;
-//        }
+        if (pieceType == PieceType.ROOK) {
+            RookMoveCalculator.Rook_Move_Calculator(board, myPosition, moves, teamColor);
+            return moves;
+        }
 //        if (pieceType == PieceType.PAWN) {
 //            PieceMovesCalculator.PawnMoveCalculator(board, myPosition, teamColor, moves);
 //            return moves;
