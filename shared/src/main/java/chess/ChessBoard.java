@@ -54,13 +54,13 @@ public class ChessBoard {
                 addPiece(new ChessPosition(i+1, j+1), null);
             }
         }
-        ResetBoardHelper(PieceOrderWhite(), PieceOrderBlack());
+        resetBoardHelper(pieceOrderWhite(), pieceOrderBlack());
     }
 
-    private void ResetBoardHelper(ChessPiece[] list_of_White,ChessPiece[] list_of_Black) {
+    private void resetBoardHelper(ChessPiece[] listOfWhite,ChessPiece[] listOfBlack) {
         for (int i = 0; i < 8; i++) {
-            addPiece(new ChessPosition(1, i+1), list_of_White[i]);
-            addPiece(new ChessPosition(8, i+1), list_of_Black[i]);
+            addPiece(new ChessPosition(1, i+1), listOfWhite[i]);
+            addPiece(new ChessPosition(8, i+1), listOfBlack[i]);
         }
         for (int i = 0; i < 8; i++) {
             addPiece(new ChessPosition(2, i+1), new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.PAWN));
@@ -68,7 +68,7 @@ public class ChessBoard {
         }
     }
 
-    private ChessPiece[] PieceOrderWhite() {
+    private ChessPiece[] pieceOrderWhite() {
         return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.BISHOP),
@@ -79,7 +79,7 @@ public class ChessBoard {
                 new ChessPiece(ChessGame.TeamColor.WHITE, PieceType.ROOK)};
     }
 
-    private ChessPiece[] PieceOrderBlack() {
+    private ChessPiece[] pieceOrderBlack() {
         return new ChessPiece[]{new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.ROOK),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.KNIGHT),
                 new ChessPiece(ChessGame.TeamColor.BLACK, PieceType.BISHOP),
