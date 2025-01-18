@@ -10,8 +10,6 @@ public class PawnMoveCalculator {
                                             ArrayList<ChessMove> moves, ChessGame.TeamColor teamColor) {
         int startRow = myPosition.getRow() - 1;
         int startColumn = myPosition.getColumn() - 1;
-        chess.ChessPiece.PieceType[] promotions = new ChessPiece.PieceType[]{ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT,
-                ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN};
         //first move check
         if (startRow == 1 && teamColor == ChessGame.TeamColor.WHITE) {
             if (board.array[startRow + 1][startColumn] == null) {
@@ -55,9 +53,7 @@ public class PawnMoveCalculator {
                 if (capturePosition(startRow + 1, startColumn + 1, teamColor, board)) {
                     if (promoteChecker(startRow + 1, ChessGame.TeamColor.WHITE)) {
                         ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn + 2);
-                        for (int i = 0; i < 4; i++) {
-                            moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-                        }
+                        promotion(myPosition, newPosition, moves);
                     }
                     else {
                         ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn + 2);
@@ -70,9 +66,7 @@ public class PawnMoveCalculator {
                 if (capturePosition(startRow + 1, startColumn - 1, teamColor, board)) {
                     if (promoteChecker(startRow + 1, ChessGame.TeamColor.WHITE)) {
                         ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn);
-                        for (int i = 0; i < 4; i++) {
-                            moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-                        }
+                        promotion(myPosition, newPosition, moves);
                     }
                     else {
                         ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn);
@@ -87,9 +81,7 @@ public class PawnMoveCalculator {
                 if (capturePosition(startRow - 1, startColumn + 1, teamColor, board)) {
                     if (promoteChecker(startRow - 1, ChessGame.TeamColor.BLACK)) {
                         ChessPosition newPosition = new ChessPosition(startRow, startColumn + 2);
-                        for (int i = 0; i < 4; i++) {
-                            moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-                        }
+                        promotion(myPosition, newPosition, moves);
                     }
                     else {
                         ChessPosition newPosition = new ChessPosition(startRow, startColumn + 2);
@@ -102,9 +94,7 @@ public class PawnMoveCalculator {
                 if (capturePosition(startRow - 1, startColumn - 1, teamColor, board)) {
                     if (promoteChecker(startRow - 1, ChessGame.TeamColor.BLACK)) {
                         ChessPosition newPosition = new ChessPosition(startRow, startColumn);
-                        for (int i = 0; i < 4; i++) {
-                            moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-                        }
+                        promotion(myPosition, newPosition, moves);
                     }
                     else {
                         ChessPosition newPosition = new ChessPosition(startRow, startColumn);
@@ -113,20 +103,14 @@ public class PawnMoveCalculator {
                 }
             }
         }
-        //Capture promotion
-
         //promotion
         if (startRow + 1 == 7 && teamColor == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn + 1);
-            for (int i = 0; i < 4; i++) {
-                moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-            }
+            promotion(myPosition, newPosition, moves);
         }
         if (startRow - 1 == 0 && teamColor == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(startRow, startColumn + 1);
-            for (int i = 0; i < 4; i++) {
-                moves.add(new ChessMove(myPosition, newPosition, promotions[i]));
-            }
+            promotion(myPosition, newPosition, moves);
         }
     }
 
@@ -140,5 +124,13 @@ public class PawnMoveCalculator {
 
     public static boolean promoteChecker(int row, ChessGame.TeamColor teamColor) {
         return ((teamColor == ChessGame.TeamColor.WHITE && row == 7) || (teamColor == ChessGame.TeamColor.BLACK && row == 0));
+    }
+
+    public static void promotion(ChessPosition start, ChessPosition end, ArrayList<ChessMove> moves) {
+        chess.ChessPiece.PieceType[] promotions = new ChessPiece.PieceType[]{ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT,
+                ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN};
+        for (int i = 0; i < 4; i++) {
+            moves.add(new ChessMove(start, end, promotions[i]));
+        }
     }
 }
