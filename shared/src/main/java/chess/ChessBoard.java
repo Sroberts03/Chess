@@ -100,23 +100,4 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.deepHashCode(array);
     }
-
-    //     public static void printBoard(ChessBoard board) {
-//        System.out.print("new board\n");
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (board.array[i][j] != null) {
-//                    PieceType type = board.array[i][j].getPieceType();
-//                    ChessGame.TeamColor teamColor = board.array[i][j].getTeamColor();
-//                    System.out.print(type + "." + teamColor + " | ");
-//                }
-//                else if (board.array[i][j] == null) {
-//                    System.out.print("NULL" + " | ");
-//                }
-//                if (j==7) {
-//                    System.out.print("\n");
-//                }
-//            }
-//        }
-//    }
 }
