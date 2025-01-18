@@ -1,4 +1,4 @@
-package chess.MovesCalculator;
+package chess.moves.calculator;
 
 import chess.*;
 
@@ -40,10 +40,10 @@ public class PawnMoveCalculator {
 
         //normal move
         if ((startRow >= 2 && startRow <= 5 && teamColor == ChessGame.TeamColor.WHITE)) {
-            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow + 1, startColumn, board, myPosition, teamColor, moves);
+            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow + 1, startColumn, board, myPosition, moves);
         }
         if ((startRow >= 2 && startRow <= 5 && teamColor == ChessGame.TeamColor.BLACK)) {
-            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow - 1, startColumn, board, myPosition, teamColor, moves);
+            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow - 1, startColumn, board, myPosition, moves);
         }
 
         //Capture Piece
