@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PawnMoveCalculator {
 
-    public static void Pawn_Move_Calculator(ChessBoard board, ChessPosition myPosition,
+    public static void pawnMoveCalculator(ChessBoard board, ChessPosition myPosition,
                                             ArrayList<ChessMove> moves, ChessGame.TeamColor teamColor) {
         int startRow = myPosition.getRow() - 1;
         int startColumn = myPosition.getColumn() - 1;
@@ -40,10 +40,10 @@ public class PawnMoveCalculator {
 
         //normal move
         if ((startRow >= 2 && startRow <= 5 && teamColor == ChessGame.TeamColor.WHITE)) {
-            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow + 1, startColumn, board, myPosition, moves);
+            MoveCalcHelper.moveCalcHelperPawn(startRow + 1, startColumn, board, myPosition, moves);
         }
         if ((startRow >= 2 && startRow <= 5 && teamColor == ChessGame.TeamColor.BLACK)) {
-            MoveCalcHelper.Move_Calc_Helper_Pawn(startRow - 1, startColumn, board, myPosition, moves);
+            MoveCalcHelper.moveCalcHelperPawn(startRow - 1, startColumn, board, myPosition, moves);
         }
 
         //Capture Piece

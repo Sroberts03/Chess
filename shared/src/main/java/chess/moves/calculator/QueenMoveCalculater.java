@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class QueenMoveCalculater {
 
-    public static void Queen_Move_Calculator(ChessBoard board, ChessPosition myPosition,
+    public static void queenMoveCalculator(ChessBoard board, ChessPosition myPosition,
                                              ArrayList<ChessMove> moves, ChessGame.TeamColor teamColor) {
         int startCol = myPosition.getColumn() - 1;
         int startRow = myPosition.getRow() - 1;
-        RookAndQueenHelper.Rook_And_Queen(startRow, startCol,
+        RookAndQueenHelper.rookAndQueen(startRow, startCol,
                 board, myPosition, teamColor, moves);
-        BishopAndQueenHelper.Bishop_And_Queen(startRow, startCol,
+        BishopAndQueenHelper.bishopAndQueen(startRow, startCol,
                 board, myPosition, teamColor, moves);
     }
 }

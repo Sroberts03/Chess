@@ -58,27 +58,27 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
         if (pieceType == PieceType.KING) {
-            kingMoveCalculator.King_Move_Calculator(board, myPosition, moves, teamColor);
+            KingMoveCalculator.kingMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.QUEEN) {
-            QueenMoveCalculater.Queen_Move_Calculator(board, myPosition, moves, teamColor);
+            QueenMoveCalculater.queenMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.BISHOP) {
-            BishopMoveCalculator.Bishop_Move_Calculator(board, myPosition, moves, teamColor);
+            BishopMoveCalculator.bishopMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.KNIGHT) {
-            KnightMoveCalculator.Knight_Move_Calculator(board, myPosition, moves, teamColor);
+            KnightMoveCalculator.knightMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.ROOK) {
-            RookMoveCalculator.Rook_Move_Calculator(board, myPosition, moves, teamColor);
+            RookMoveCalculator.rookMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.PAWN) {
-            PawnMoveCalculator.Pawn_Move_Calculator(board, myPosition, moves, teamColor);
+            PawnMoveCalculator.pawnMoveCalculator(board, myPosition, moves, teamColor);
             return moves;
         }
         return java.util.List.of();
