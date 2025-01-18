@@ -1,6 +1,7 @@
 package chess;
 
-import chess.MovesCalculator.*;
+import chess.moves.calculator.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -57,7 +58,7 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
         if (pieceType == PieceType.KING) {
-            king_move_calculator.King_Move_Calculator(board, myPosition, moves, teamColor);
+            kingMoveCalculator.King_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.QUEEN) {

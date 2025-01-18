@@ -1,4 +1,4 @@
-package chess.MovesCalculator;
+package chess.moves.calculator;
 
 import chess.ChessBoard;
 import chess.ChessGame;
@@ -7,7 +7,7 @@ import chess.ChessPosition;
 import java.util.ArrayList;
 
 
-public class king_move_calculator {
+public class kingMoveCalculator {
 
     public static void King_Move_Calculator(ChessBoard board, ChessPosition myPosition,
                                      ArrayList<ChessMove> moves, ChessGame.TeamColor teamColor) {
