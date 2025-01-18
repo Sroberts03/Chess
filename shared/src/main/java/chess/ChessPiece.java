@@ -57,7 +57,7 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ArrayList<ChessMove> moves = new ArrayList<>();
         if (pieceType == PieceType.KING) {
-            KingMoveCalculator.King_Move_Calculator(board, myPosition, moves, teamColor);
+            king_move_calculator.King_Move_Calculator(board, myPosition, moves, teamColor);
             return moves;
         }
         if (pieceType == PieceType.QUEEN) {
