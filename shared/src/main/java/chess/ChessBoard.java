@@ -100,4 +100,23 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.deepHashCode(array);
     }
+
+    @Override
+    public String toString() {
+        String boardString = "";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (array[i][j] == null) {
+                    boardString += " null " + "| ";
+                }
+                else {
+                    boardString += array[i][j].toString() + " | ";
+                }
+                if (j == 7) {
+                    boardString += "\n";
+                }
+            }
+        }
+        return boardString;
+    }
 }
