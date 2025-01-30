@@ -61,7 +61,15 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-
+        ChessPiece piece = chessBoard.getPiece(move.getStartPosition());
+        chessBoard.addPiece(move.getStartPosition(), null);
+        chessBoard.addPiece(move.getEndPosition(), piece);
+        if (getTeamTurn() == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        else if (getTeamTurn() == TeamColor.BLACK) {
+            setTeamTurn(TeamColor.WHITE);
+        }
     }
 
     /**
@@ -92,7 +100,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true;
     }
 
     /**

@@ -97,4 +97,9 @@ public class ChessPiece {
     public int hashCode() {
         return Objects.hash(teamColor, pieceType);
     }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" + teamColor + " " + pieceType +'}';
+    }
 }
