@@ -59,8 +59,35 @@ public class ChessGame {
         }
         else {
             moves = (ArrayList<ChessMove>) startPiece.pieceMoves(chessBoard, startPosition);
+            for (ChessMove move : moves) {
+                if (movePutsInCheck(move, startPiece.getTeamColor())) {
+                    moves.remove(move);
+                }
+            }
         }
         return moves;
+    }
+
+    public boolean movePutsInCheck(ChessMove move, TeamColor color) {
+        //make fake move
+        makeFakeMove(move);
+        //check if king is now in check
+        boolean status = isInCheck(color);
+        //undo fake move
+        undoFakeMove(move);
+        return status;
+    }
+
+    public void makeFakeMove(ChessMove move) {
+        ChessPiece piece = chessBoard.getPiece(move.getStartPosition());
+        chessBoard.addPiece(move.getStartPosition(), null);
+        chessBoard.addPiece(move.getEndPosition(), piece);
+    }
+
+    public void undoFakeMove(ChessMove move) {
+        ChessPiece piece = chessBoard.getPiece(move.getStartPosition());
+        chessBoard.addPiece(move.getEndPosition(), null);
+        chessBoard.addPiece(move.getStartPosition(), piece);
     }
 
     /**
@@ -127,7 +154,17 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        return true;
+        ArrayList<ChessMove> validMoves = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessBoard.array[i][j] != null
+                        && chessBoard.getPiece(new ChessPosition(i+1,j+1)).getTeamColor() == teamColor) {
+                    ArrayList<ChessMove> possibleMoves = (ArrayList<ChessMove>) validMoves(new ChessPosition(i+1,j+1));
+                    validMoves.addAll(possibleMoves);
+                }
+            }
+        }
+        return validMoves.isEmpty();
     }
 
     /**
