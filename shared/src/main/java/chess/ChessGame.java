@@ -59,19 +59,18 @@ public class ChessGame {
             moves.add(null);
             return moves;
         }
-//        else if (isInCheck(getTeamTurn())) {
-//            return moves;
-//        }
         else {
             moves = (ArrayList<ChessMove>) startPiece.pieceMoves(chessBoard, startPosition);
             for (ChessMove move : moves) {
-                if (movePutsInCheck(move, getTeamTurn(), startPosition));
+                if (movePutsInOrOutOfCheck(move, getTeamTurn(), startPosition)){
+                    moves.remove(move);
+                }
             }
         }
         return moves;
     }
 
-    public boolean movePutsInCheck(ChessMove move, TeamColor color, ChessPosition startPosition) {
+    public boolean movePutsInOrOutOfCheck(ChessMove move, TeamColor color, ChessPosition startPosition) {
         //make fake move
         makeFakeMove(move);
         //check if king is now in check
