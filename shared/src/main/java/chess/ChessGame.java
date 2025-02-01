@@ -64,10 +64,9 @@ public class ChessGame {
         }
         else {
             moves = (ArrayList<ChessMove>) startPiece.pieceMoves(chessBoard, startPosition);
-            for (int i = 0; i < moves.size(); i++) {
-                ChessMove move = moves.get(i);
-                if (movePutsInCheck(move, startPiece.getTeamColor(), startPosition)){
-                    invalidMoves.add(moves.get(i));
+            for (ChessMove move : moves) {
+                if (movePutsInCheck(move, startPiece.getTeamColor())) {
+                    invalidMoves.add(move);
                 }
             }
             moves.removeAll(invalidMoves);
@@ -75,7 +74,7 @@ public class ChessGame {
         return moves;
     }
 
-    public boolean movePutsInCheck(ChessMove move, TeamColor color, ChessPosition startPosition) {
+    public boolean movePutsInCheck(ChessMove move, TeamColor color) {
         //make fake move
         ChessPiece startPiece = makeFakeMove(move);
         //check if king is now in check
@@ -154,7 +153,7 @@ public class ChessGame {
                 }
             }
         }
-        ArrayList<ChessMove> possibleMoves = (ArrayList<ChessMove>) possibleMoves(teamColor);
+        ArrayList<ChessMove> possibleMoves = possibleMoves(teamColor);
         for (ChessMove move : possibleMoves) {
             if (move.getEndPosition().equals(kingPosition)) {
                 return true;
@@ -230,7 +229,7 @@ public class ChessGame {
                 }
             }
         }
-        return validMoves.isEmpty();
+        return validMoves.isEmpty() && !isInCheck(teamColor) && teamColor == getTeamTurn();
     }
 
     /**
