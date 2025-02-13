@@ -1,4 +1,4 @@
 package resultrequest;
 
-public record GameListRequest() {
+public record GameListRequest(String authToken) {
 }

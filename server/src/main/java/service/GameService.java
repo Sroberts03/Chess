@@ -5,14 +5,14 @@ import resultrequest.*;
 public class GameService {
 
     public GameListResult getGames(GameListRequest gameListRequest) {
-
+        return null;
     }
 
     public CreateGameResult login(CreateGameRequest createGameRequest) {
-
+        return null;
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) {
+    public void joinGame(JoinGameRequest joinGameRequest) {
 
     }
 }
