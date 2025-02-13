@@ -1,4 +1,7 @@
 package resultrequest;
 
-public class GameListResult {
+import model.GameData;
+import java.util.ArrayList;
+
+public record GameListResult(ArrayList<GameData> gameList) {
 }
