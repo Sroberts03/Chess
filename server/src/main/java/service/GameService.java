@@ -8,7 +8,8 @@ public class GameService {
         return null;
     }
 
-    public CreateGameResult login(CreateGameRequest createGameRequest) {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) {
+
         return null;
     }
 
