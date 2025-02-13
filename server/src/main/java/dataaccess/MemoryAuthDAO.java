@@ -1,28 +1,31 @@
 package dataaccess;
 
+import model.AuthData;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MemoryAuthDAO implements AuthDAO {
 
-    public Map<String, String> authMap;
+    public static Map<String, String> authMap;
 
     MemoryAuthDAO() {
         authMap = new HashMap<String, String>();
     }
 
-    public void createAuth(String authToken, String username) {
+    public static void createAuth(AuthData authData) {
+        String username = authData.username();
+        String authToken = authData.authToken();
         authMap.put(authToken, username);
     }
 
-    public String getAuth(String authToken) throws DataAccessException {
+    public static String getAuth(String authToken) throws DataAccessException {
         if (!authMap.containsKey(authToken)) {
             throw new DataAccessException("Error: unauthorized");
         }
         return authMap.get(authToken);
     }
 
-    public void removeAuth(String authToken) {
+    public static void removeAuth(String authToken) {
         authMap.remove(authToken);
     }
 }
