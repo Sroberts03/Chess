@@ -30,4 +30,8 @@ public class MemoryGameDAO implements GameDAO {
     public static void clearGame() {
         gameMap.clear();
     }
+
+    public static int createGameId() {
+        return gameMap.size() + 1;
+    }
 }
