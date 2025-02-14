@@ -4,7 +4,6 @@ import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import resultrequest.*;
-
 import static dataaccess.MemoryAuthDAO.*;
 import static dataaccess.MemoryUserDAO.createUser;
 import static dataaccess.MemoryUserDAO.getUser;
