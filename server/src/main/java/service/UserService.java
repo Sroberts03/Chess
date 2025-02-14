@@ -1,6 +1,9 @@
 package service;
 
 import dataaccess.DataAccessException;
+import dataaccess.Error400;
+import dataaccess.Error401;
+import dataaccess.Error403;
 import model.AuthData;
 import model.UserData;
 import resultrequest.*;
@@ -16,6 +19,9 @@ public class UserService {
         String email = registerRequest.email();
         UserData user = getUser(username);
         AuthData newAuth = null;
+        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+            throw new Error400("Error: bad request");
+        }
         if (user == null) {
             UserData newUser = new UserData(username, password, email);
             createUser(newUser);
@@ -23,7 +29,7 @@ public class UserService {
             createAuth(newAuth);
         }
         if (user != null) {
-            throw new DataAccessException("Error: already taken");
+            throw new Error403("Error: already taken");
         }
         return new RegisterResult(username, newAuth.authToken());
     }
@@ -33,10 +39,10 @@ public class UserService {
         String password = loginRequest.password();
         UserData user = getUser(username);
         if (user == null) {
-            throw new DataAccessException("Error: unauthorized");
+            throw new Error401("Error: unauthorized");
         }
         if (!user.password().equals(password)) {
-            throw new DataAccessException("Error: unauthorized");
+            throw new Error401("Error: unauthorized");
         }
         AuthData auth = new AuthData(generateToken(),username);
         createAuth(auth);
@@ -47,7 +53,7 @@ public class UserService {
         String auth = logoutRequest.authToken();
         String otherAuth = getAuth(auth);
         if (otherAuth == null) {
-            throw new DataAccessException("Error: unauthorized");
+            throw new Error401("Error: unauthorized");
         }
         removeAuth(auth);
     }
