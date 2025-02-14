@@ -6,9 +6,7 @@ import model.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import resultrequest.*;
-
 import java.util.Objects;
-
 import static dataaccess.MemoryAuthDAO.*;
 import static dataaccess.MemoryUserDAO.createUser;
 import static dataaccess.MemoryUserDAO.userMap;
@@ -43,6 +41,62 @@ public class UserServiceTests {
         UserData user = new UserData("sam", "123123", "123@123.123");
         createUser(user);
         RegisterRequest request = new RegisterRequest("sam", "123123", "123@123.123");
+        boolean thrown = false;
+        try {
+            register(request);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
+
+    @Test
+    @DisplayName("register Bad Request Empty Password")
+    public void registerTestBadRequestEmptyPassword() {
+        clearApp();
+        RegisterRequest request = new RegisterRequest("sam", "", "123@123.123");
+        boolean thrown = false;
+        try {
+            register(request);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
+
+    @Test
+    @DisplayName("register Bad Request Empty Username")
+    public void registerTestBadRequestEmptyUsername() {
+        clearApp();
+        RegisterRequest request = new RegisterRequest("", "123123", "123@123.123");
+        boolean thrown = false;
+        try {
+            register(request);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
+
+    @Test
+    @DisplayName("register Bad Request Empty Email")
+    public void registerTestBadRequestEmptyEmail() {
+        clearApp();
+        RegisterRequest request = new RegisterRequest("sam", "123123", "");
+        boolean thrown = false;
+        try {
+            register(request);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
+
+    @Test
+    @DisplayName("register Bad Request Empty Password")
+    public void registerTestBadRequest() {
+        clearApp();
+        RegisterRequest request = new RegisterRequest("sam", "", "123@123.123");
         boolean thrown = false;
         try {
             register(request);
