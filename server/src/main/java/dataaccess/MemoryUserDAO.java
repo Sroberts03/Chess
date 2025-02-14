@@ -9,7 +9,7 @@ public class MemoryUserDAO implements UserDAO {
 
     public static Map<String, UserData> userMap = new HashMap<>();
 
-    public static void createUser(UserData user) throws DataAccessException{
+    public static void createUser(UserData user) {
         String username = user.username();
         userMap.put(username, user);
     }
