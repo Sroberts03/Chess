@@ -45,7 +45,9 @@ public class UserServiceTests {
         try {
             register(request);
         } catch (DataAccessException e) {
-            thrown = true;
+            if (e.getMessage().equals("Error: already taken")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -59,7 +61,9 @@ public class UserServiceTests {
         try {
             register(request);
         } catch (DataAccessException e) {
-            thrown = true;
+            if (e.getMessage().equals("Error: bad request")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -73,7 +77,9 @@ public class UserServiceTests {
         try {
             register(request);
         } catch (DataAccessException e) {
-            thrown = true;
+            if (e.getMessage().equals("Error: bad request")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -87,21 +93,9 @@ public class UserServiceTests {
         try {
             register(request);
         } catch (DataAccessException e) {
-            thrown = true;
-        }
-        assert thrown;
-    }
-
-    @Test
-    @DisplayName("register Bad Request Empty Password")
-    public void registerTestBadRequest() {
-        clearApp();
-        RegisterRequest request = new RegisterRequest("sam", "", "123@123.123");
-        boolean thrown = false;
-        try {
-            register(request);
-        } catch (DataAccessException e) {
-            thrown = true;
+            if (e.getMessage().equals("Error: bad request")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -137,8 +131,10 @@ public class UserServiceTests {
         LoginRequest loginRequest = new LoginRequest(user.username(), "12341234");
         try {
             login(loginRequest);
-        } catch (DataAccessException d) {
-            thrown = true;
+        } catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -154,8 +150,10 @@ public class UserServiceTests {
         LoginRequest loginRequest = new LoginRequest("badUsername", user.password());
         try {
             login(loginRequest);
-        } catch (DataAccessException d) {
-            thrown = true;
+        } catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -171,8 +169,10 @@ public class UserServiceTests {
         LoginRequest loginRequest = new LoginRequest("badUsername", "123");
         try {
             login(loginRequest);
-        } catch (DataAccessException d) {
-            thrown = true;
+        } catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
@@ -203,8 +203,10 @@ public class UserServiceTests {
         boolean thrown = false;
         try {
             logout(request);
-        } catch (DataAccessException d) {
-            thrown = true;
+        } catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")) {
+                thrown = true;
+            }
         }
         assert thrown;
     }
