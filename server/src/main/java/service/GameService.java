@@ -5,9 +5,12 @@ import dataaccess.DataAccessException;
 import dataaccess.Error400;
 import dataaccess.Error401;
 import dataaccess.MemoryGameDAO;
+import model.AuthData;
 import model.GameData;
 import resultrequest.*;
+
 import java.util.ArrayList;
+
 import static dataaccess.MemoryAuthDAO.getAuth;
 import static dataaccess.MemoryGameDAO.createGameId;
 import static dataaccess.MemoryGameDAO.listGames;
@@ -16,7 +19,7 @@ public class GameService {
 
     public static GameListResult getGames(GameListRequest gameListRequest) throws DataAccessException {
         String auth = gameListRequest.authToken();
-        String authDb = getAuth(auth);
+        AuthData authDb = getAuth(auth);
         if (authDb == null) {
             throw new Error401("Error: unauthorized");
         }
@@ -26,7 +29,7 @@ public class GameService {
 
     public static CreateGameResult createGame(CreateGameRequest createGameRequest) throws DataAccessException {
         String auth = createGameRequest.authToken();
-        String authDb = getAuth(auth);
+        AuthData authDb = getAuth(auth);
         if (createGameRequest.gameName().isEmpty()) {
             throw new Error400("Error: bad request");
         }

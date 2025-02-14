@@ -51,7 +51,7 @@ public class UserService {
 
     public static void logout(LogoutRequest logoutRequest) throws DataAccessException {
         String auth = logoutRequest.authToken();
-        String otherAuth = getAuth(auth);
+        AuthData otherAuth = getAuth(auth);
         if (otherAuth == null) {
             throw new Error401("Error: unauthorized");
         }
