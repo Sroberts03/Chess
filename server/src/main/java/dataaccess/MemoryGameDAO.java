@@ -8,26 +8,26 @@ import java.util.Map;
 
 public class MemoryGameDAO implements GameDAO {
 
-    public Map<Integer, GameData> gameMap;
+    public static Map<Integer, GameData> gameMap = new HashMap<>();
 
-    public MemoryGameDAO() {
-        gameMap = new HashMap<>();
-    }
-
-    public void createGame(GameData game) {
+    public static void createGame(GameData game) {
         Integer gameID = game.gameID();
         gameMap.put(gameID, game);
     }
 
-    public GameData getGame(Integer gameID) {
+    public static GameData getGame(Integer gameID) {
         return gameMap.get(gameID);
     }
 
-    public ArrayList<GameData> listGames() {
+    public static ArrayList<GameData> listGames() {
         return new ArrayList<>(gameMap.values());
     }
 
-    public void updateGame(GameData game) {
+    public static void updateGame(GameData game) {
         gameMap.put(game.gameID(), game);
+    }
+
+    public static void clearGame() {
+        gameMap.clear();
     }
 }
