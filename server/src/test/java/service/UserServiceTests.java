@@ -39,12 +39,22 @@ public class UserServiceTests {
     @Test
     @DisplayName("register user already exists")
     public void registerTestUserAlreadyExists() {
-
+        clearApp();
+        UserData user = new UserData("sam", "123123", "123@123.123");
+        createUser(user);
+        RegisterRequest request = new RegisterRequest("sam", "123123", "123@123.123");
+        boolean thrown = false;
+        try {
+            register(request);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
     }
 
     @Test
     @DisplayName("login positive")
-    public void loginTest() throws DataAccessException {
+    public void loginTest() {
         clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         createUser(user);
@@ -64,7 +74,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad password")
-    public void loginTestBadPassword() throws DataAccessException {
+    public void loginTestBadPassword() {
         clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         createUser(user);
@@ -81,7 +91,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad username")
-    public void loginTestBadUsername() throws DataAccessException {
+    public void loginTestBadUsername() {
         clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         createUser(user);
@@ -98,7 +108,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad username and bad password")
-    public void loginTestBadUsernameAndBadPassword() throws DataAccessException {
+    public void loginTestBadUsernameAndBadPassword() {
         clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         createUser(user);
@@ -115,7 +125,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("logout good auth")
-    public void logoutGoodAuth() throws DataAccessException {
+    public void logoutGoodAuth() {
         clearApp();
         AuthData auth = new AuthData("123", "sam");
         createAuth(auth);
