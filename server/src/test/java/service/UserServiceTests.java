@@ -6,7 +6,7 @@ import model.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import resultrequest.*;
-import java.util.Objects;
+
 import static dataaccess.MemoryAuthDAO.*;
 import static dataaccess.MemoryUserDAO.createUser;
 import static dataaccess.MemoryUserDAO.userMap;
@@ -31,7 +31,7 @@ public class UserServiceTests {
         assert !thrown;
         assert userMap.containsValue(expectedUser);
         assert authMap.containsKey(result.authToken());
-        assert getAuth(result.authToken()).equals(result.username());
+        assert getAuth(result.authToken()).username().equals(result.username());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class UserServiceTests {
         }
         assert !thrown;
         assert authMap.containsKey(loginResult.authToken());
-        assert Objects.equals(getAuth(loginResult.authToken()), user.username());
+        assert getAuth(loginResult.authToken()).username().equals(user.username());
     }
 
     @Test

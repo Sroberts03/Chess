@@ -7,15 +7,14 @@ import java.util.UUID;
 
 public class MemoryAuthDAO implements AuthDAO {
 
-    public static Map<String, String> authMap = new HashMap<>();
+    public static Map<String, AuthData> authMap = new HashMap<>();
 
     public static void createAuth(AuthData authData) {
-        String username = authData.username();
         String authToken = authData.authToken();
-        authMap.put(authToken, username);
+        authMap.put(authToken, authData);
     }
 
-    public static String getAuth(String authToken) {
+    public static AuthData getAuth(String authToken) {
         return authMap.get(authToken);
     }
 
