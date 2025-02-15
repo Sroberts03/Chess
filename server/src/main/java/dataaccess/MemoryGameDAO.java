@@ -24,6 +24,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     public static void updateGame(GameData game) {
+        gameMap.remove(game.gameID());
         gameMap.put(game.gameID(), game);
     }
 
