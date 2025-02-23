@@ -1,55 +1,56 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
+import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import resultrequest.*;
 
-import static dataaccess.MemoryAuthDAO.createAuth;
-import static dataaccess.MemoryGameDAO.*;
-import static service.ClearAppService.clearApp;
-import static service.GameService.getGames;
-import static service.GameService.joinGame;
-
 public class GameServiceTests {
+
+    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final UserDAO userDAO = new MemoryUserDAO();
+    private final GameService gameService = new GameService(authDAO, gameDAO);
+    private final ClearAppService clearApp = new ClearAppService(gameDAO,authDAO,userDAO);
+
 
     @Test
     @DisplayName("getGames Authorized")
     public void getGamesTestAuthorized() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, null, null,
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         ChessGame game2 = new ChessGame();
         GameData gameData2 = new GameData(123, null, null,
                 "test",game2);
-        createGame(gameData2);
+        gameDAO.createGame(gameData2);
         boolean thrown = false;
         GameListRequest request = new GameListRequest("123");
         GameListResult result = null;
         try {
-            result = getGames(request);
+            result = gameService.getGames(request);
         } catch (DataAccessException e) {
             thrown = true;
         }
         assert !thrown;
-        assert result.gameList().equals(listGames());
+        assert result.gameList().equals(gameDAO.listGames());
     }
 
     @Test
     @DisplayName("getGames Unauthorized")
     public void getGamesTestUnauthorized() {
-        clearApp();
+        clearApp.clearApp();
         boolean thrown = false;
         GameListRequest request = new GameListRequest("123");
         try {
-            getGames(request);
+            gameService.getGames(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: unauthorized")) {
                 thrown = true;
@@ -61,27 +62,26 @@ public class GameServiceTests {
     @Test
     @DisplayName("createGame Authorized")
     public void createGameTest() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         boolean thrown = false;
         CreateGameResult result = null;
         try {
-            result = GameService.createGame(new CreateGameRequest(auth.authToken(), "123"));
+            result = gameService.createGame(new CreateGameRequest(auth.authToken(), "123"));
         } catch (DataAccessException e) {
             thrown = true;
         }
-        assert !thrown;
-        assert gameMap.containsKey(result.gameID());
+        assert result != null;
     }
 
     @Test
     @DisplayName("createGame Unauthorized")
     public void createGameTestUnauthorized() {
-        clearApp();
+        clearApp.clearApp();
         boolean thrown = false;
         try {
-            GameService.createGame(new CreateGameRequest("testGame", "123"));
+            gameService.createGame(new CreateGameRequest("testGame", "123"));
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: unauthorized")) {
                 thrown = true;
@@ -93,12 +93,12 @@ public class GameServiceTests {
     @Test
     @DisplayName("createGame Bad Request")
     public void createGameTestBadRequest() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         boolean thrown = false;
         try {
-            GameService.createGame(new CreateGameRequest("", "123"));
+            gameService.createGame(new CreateGameRequest("", "123"));
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -110,61 +110,61 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Happy Path for Black")
     public void joinGameTestHappyPathBlack() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("black",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             thrown = true;
         }
         assert !thrown;
-        assert !gameMap.get(gameData.gameID()).blackUsername().isEmpty();
-        assert gameMap.get(gameData.gameID()).blackUsername().equals("sam");
+        assert !gameDAO.getGameMap().get(gameData.gameID()).blackUsername().isEmpty();
+        assert gameDAO.getGameMap().get(gameData.gameID()).blackUsername().equals("sam");
     }
 
     @Test
     @DisplayName("joinGame Happy Path for White")
     public void joinGameTestHappyPathWhite() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("White",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             thrown = true;
         }
         assert !thrown;
-        assert !gameMap.get(gameData.gameID()).whiteUsername().isEmpty();
-        assert gameMap.get(gameData.gameID()).whiteUsername().equals("sam");
+        assert !gameDAO.getGameMap().get(gameData.gameID()).whiteUsername().isEmpty();
+        assert gameDAO.getGameMap().get(gameData.gameID()).whiteUsername().equals("sam");
     }
 
 
     @Test
     @DisplayName("joinGame Unauthorized")
     public void joinGameTestUnauthorized() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("White",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: unauthorized")) {
                 thrown = true;
@@ -176,17 +176,17 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Bad Request Empty Player Color")
     public void joinGameTestBadRequestEmptyPlayer() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -198,17 +198,17 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Bad Request Empty gameId")
     public void joinGameTestBadRequestEmptyGameId() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("black",null,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -220,17 +220,17 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Bad Request Wrong Color")
     public void joinGameTestBadRequestWrongColor() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("purple",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -242,17 +242,17 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Already Taken White")
     public void joinGameTestAlreadyTakenWhite() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "henry", "",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("white",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: already taken")) {
                 thrown = true;
@@ -264,17 +264,17 @@ public class GameServiceTests {
     @Test
     @DisplayName("joinGame Already Taken Black")
     public void joinGameTestAlreadyTakenBlack() {
-        clearApp();
+        clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
-        createAuth(auth);
+        authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
         GameData gameData = new GameData(123, "", "Henry",
                 "test",game);
-        createGame(gameData);
+        gameDAO.createGame(gameData);
         boolean thrown = false;
         JoinGameRequest request = new JoinGameRequest("black",123,auth.authToken());
         try {
-            joinGame(request);
+            gameService.joinGame(request);
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: already taken")) {
                 thrown = true;

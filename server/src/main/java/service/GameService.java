@@ -5,28 +5,35 @@ import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import resultrequest.*;
-
 import java.util.ArrayList;
 import java.util.Locale;
+import dataaccess.AuthDAO;
 
-import static dataaccess.MemoryAuthDAO.getAuth;
-import static dataaccess.MemoryGameDAO.*;
+
 
 public class GameService {
 
-    public static GameListResult getGames(GameListRequest gameListRequest) throws DataAccessException {
+    private final GameDAO gameDAO;
+    private final AuthDAO authDAO;
+
+    GameService(AuthDAO authDAO, GameDAO gameDAO) {
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+    }
+
+    public GameListResult getGames(GameListRequest gameListRequest) throws DataAccessException {
         String auth = gameListRequest.authToken();
-        AuthData authDb = getAuth(auth);
+        AuthData authDb = authDAO.getAuth(auth);
         if (authDb == null) {
             throw new Error401("Error: unauthorized");
         }
-        ArrayList<GameData> listOfGames = listGames();
+        ArrayList<GameData> listOfGames = gameDAO.listGames();
         return new GameListResult(listOfGames);
     }
 
-    public static CreateGameResult createGame(CreateGameRequest createGameRequest) throws DataAccessException {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws DataAccessException {
         String auth = createGameRequest.authToken();
-        AuthData authDb = getAuth(auth);
+        AuthData authDb = authDAO.getAuth(auth);
         if (createGameRequest.gameName().isEmpty()) {
             throw new Error400("Error: bad request");
         }
@@ -35,14 +42,14 @@ public class GameService {
         }
         String gameName = createGameRequest.gameName();
         ChessGame newGame = new ChessGame();
-        GameData gameData = new GameData(createGameId(),"","",gameName,newGame);
-        MemoryGameDAO.createGame(gameData);
+        GameData gameData = new GameData(gameDAO.createGameId(),"","",gameName,newGame);
+        gameDAO.createGame(gameData);
         return new CreateGameResult(gameData.gameID());
     }
 
-    public static void joinGame(JoinGameRequest joinGameRequest) throws DataAccessException {
+    public void joinGame(JoinGameRequest joinGameRequest) throws DataAccessException {
         String auth = joinGameRequest.authToken();
-        AuthData authDb = getAuth(auth);
+        AuthData authDb = authDAO.getAuth(auth);
         String desiredColor = joinGameRequest.playerColor();
         if (desiredColor.isEmpty() || joinGameRequest.gameID() == null
                 || !desiredColor.toLowerCase(Locale.ROOT).equals("black")
@@ -52,14 +59,14 @@ public class GameService {
         if (authDb == null) {
             throw new Error401("Error: unauthorized");
         }
-        GameData game = getGame(joinGameRequest.gameID());
+        GameData game = gameDAO.getGame(joinGameRequest.gameID());
         if (desiredColor.toLowerCase(Locale.ROOT).equals("black")) {
             if (!game.blackUsername().isEmpty()) {
                 throw new Error403("Error: already taken");
             }
             GameData updatedGame = new GameData(game.gameID(),game.whiteUsername(),
                     authDb.username(),game.gameName(),game.game());
-            updateGame(updatedGame);
+            gameDAO.updateGame(updatedGame);
         }
         if (desiredColor.toLowerCase(Locale.ROOT).equals("white")) {
             if (!game.whiteUsername().isEmpty()) {
@@ -67,7 +74,7 @@ public class GameService {
             }
             GameData updatedGame = new GameData(game.gameID(),authDb.username(),
                     game.blackUsername(),game.gameName(),game.game());
-            updateGame(updatedGame);
+            gameDAO.updateGame(updatedGame);
         }
     }
 

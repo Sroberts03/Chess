@@ -1,14 +1,22 @@
 package service;
 
-import static dataaccess.MemoryAuthDAO.clearAuth;
-import static dataaccess.MemoryGameDAO.clearGame;
-import static dataaccess.MemoryUserDAO.clearUser;
+import dataaccess.*;
 
 public class ClearAppService {
 
-    public static void clearApp()  {
-        clearAuth();
-        clearGame();
-        clearUser();
+    private final GameDAO gameDAO;
+    private final AuthDAO authDAO;
+    private final UserDAO userDAO;
+
+    ClearAppService(GameDAO gameDAO, AuthDAO authDAO, UserDAO userDAO) {
+        this.gameDAO = gameDAO;
+        this.authDAO = authDAO;
+        this.userDAO = userDAO;
+    }
+
+    public void clearApp()  {
+        authDAO.clearAuth();
+        gameDAO.clearGame();
+        userDAO.clearUser();
     }
 }

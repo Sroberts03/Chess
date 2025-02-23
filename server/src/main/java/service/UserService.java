@@ -1,32 +1,34 @@
 package service;
 
-import dataaccess.DataAccessException;
-import dataaccess.Error400;
-import dataaccess.Error401;
-import dataaccess.Error403;
+import dataaccess.*;
 import model.AuthData;
 import model.UserData;
 import resultrequest.*;
-import static dataaccess.MemoryAuthDAO.*;
-import static dataaccess.MemoryUserDAO.createUser;
-import static dataaccess.MemoryUserDAO.getUser;
 
 public class UserService {
 
-    public static RegisterResult register(RegisterRequest registerRequest) throws DataAccessException {
+    private final AuthDAO authDAO;
+    private final UserDAO userDAO;
+
+    UserService(AuthDAO authDAO, UserDAO userDAO) {
+        this.authDAO = authDAO;
+        this.userDAO = userDAO;
+    }
+
+    public RegisterResult register(RegisterRequest registerRequest) throws DataAccessException {
         String username = registerRequest.username();
         String password = registerRequest.password();
         String email = registerRequest.email();
-        UserData user = getUser(username);
+        UserData user = userDAO.getUser(username);
         AuthData newAuth = null;
         if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
             throw new Error400("Error: bad request");
         }
         if (user == null) {
             UserData newUser = new UserData(username, password, email);
-            createUser(newUser);
-            newAuth = new AuthData(generateToken(), username);
-            createAuth(newAuth);
+            userDAO.createUser(newUser);
+            newAuth = new AuthData(authDAO.generateToken(), username);
+            authDAO.createAuth(newAuth);
         }
         if (user != null) {
             throw new Error403("Error: already taken");
@@ -34,28 +36,28 @@ public class UserService {
         return new RegisterResult(username, newAuth.authToken());
     }
 
-    public static LoginResult login(LoginRequest loginRequest) throws DataAccessException {
+    public LoginResult login(LoginRequest loginRequest) throws DataAccessException {
         String username = loginRequest.username();
         String password = loginRequest.password();
-        UserData user = getUser(username);
+        UserData user = userDAO.getUser(username);
         if (user == null) {
             throw new Error401("Error: unauthorized");
         }
         if (!user.password().equals(password)) {
             throw new Error401("Error: unauthorized");
         }
-        AuthData auth = new AuthData(generateToken(),username);
-        createAuth(auth);
+        AuthData auth = new AuthData(authDAO.generateToken(),username);
+        authDAO.createAuth(auth);
         return new LoginResult(username, auth.authToken());
     }
 
-    public static void logout(LogoutRequest logoutRequest) throws DataAccessException {
+    public void logout(LogoutRequest logoutRequest) throws DataAccessException {
         String auth = logoutRequest.authToken();
-        AuthData otherAuth = getAuth(auth);
+        AuthData otherAuth = authDAO.getAuth(auth);
         if (otherAuth == null) {
             throw new Error401("Error: unauthorized");
         }
-        removeAuth(auth);
+        authDAO.removeAuth(auth);
     }
 
 }
