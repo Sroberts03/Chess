@@ -4,11 +4,11 @@ import dataaccess.*;
 
 public class ClearAppService {
 
-    private final GameDAO gameDAO;
-    private final AuthDAO authDAO;
-    private final UserDAO userDAO;
+    private final GameDao gameDAO;
+    private final AuthDao authDAO;
+    private final UserDao userDAO;
 
-    public ClearAppService(GameDAO gameDAO, AuthDAO authDAO, UserDAO userDAO) {
+    public ClearAppService(GameDao gameDAO, AuthDao authDAO, UserDao userDAO) {
         this.gameDAO = gameDAO;
         this.authDAO = authDAO;
         this.userDAO = userDAO;

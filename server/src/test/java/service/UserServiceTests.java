@@ -9,9 +9,9 @@ import resultrequest.*;
 
 public class UserServiceTests {
 
-    private final GameDAO gameDao = new MemoryGameDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final UserDAO userDAO = new MemoryUserDAO();
+    private final GameDao gameDao = new MemoryGameDao();
+    private final AuthDao authDAO = new MemoryAuthDao();
+    private final UserDao userDAO = new MemoryUserDao();
     private final UserService userService = new UserService(authDAO,userDAO);
     private final ClearAppService clearApp = new ClearAppService(gameDao,authDAO,userDAO);
 

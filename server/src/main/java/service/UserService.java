@@ -7,10 +7,10 @@ import resultrequest.*;
 
 public class UserService {
 
-    private final AuthDAO authDAO;
-    private final UserDAO userDAO;
+    private final AuthDao authDAO;
+    private final UserDao userDAO;
 
-    public UserService(AuthDAO authDAO, UserDAO userDAO) {
+    public UserService(AuthDao authDAO, UserDao userDAO) {
         this.authDAO = authDAO;
         this.userDAO = userDAO;
     }

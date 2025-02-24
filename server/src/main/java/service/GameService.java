@@ -7,16 +7,16 @@ import model.GameData;
 import resultrequest.*;
 import java.util.ArrayList;
 import java.util.Locale;
-import dataaccess.AuthDAO;
+import dataaccess.AuthDao;
 
 
 
 public class GameService {
 
-    private final GameDAO gameDAO;
-    private final AuthDAO authDAO;
+    private final GameDao gameDAO;
+    private final AuthDao authDAO;
 
-    public GameService(AuthDAO authDAO, GameDAO gameDAO) {
+    public GameService(AuthDao authDAO, GameDao gameDAO) {
         this.gameDAO = gameDAO;
         this.authDAO = authDAO;
     }
