@@ -7,7 +7,7 @@ public class Server {
 
     private static final AuthDAO authDAO = new MemoryAuthDAO();
     private static final UserDAO userDAO = new MemoryUserDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private static final GameDAO gameDAO = new MemoryGameDAO();
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -36,6 +36,6 @@ public class Server {
         Spark.get("/game", new ListGamesHandler()); //listGames
         Spark.post("/game", new CreateGameHandler()); //createGame
         Spark.put("/game", new JoinGameHandler()); //joinGame
-        Spark.delete("/db", new ClearAppHandler()); //clearApp
+        Spark.delete("/db", new ClearAppHandler(authDAO,userDAO,gameDAO)); //clearApp
     }
 }

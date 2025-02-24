@@ -19,7 +19,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("getGames Authorized")
-    public void getGamesTestAuthorized() {
+    public void getGamesTestAuthorized() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -45,7 +45,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("getGames Unauthorized")
-    public void getGamesTestUnauthorized() {
+    public void getGamesTestUnauthorized() throws DataAccessException {
         clearApp.clearApp();
         boolean thrown = false;
         GameListRequest request = new GameListRequest("123");
@@ -61,7 +61,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("createGame Authorized")
-    public void createGameTest() {
+    public void createGameTest() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -77,7 +77,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("createGame Unauthorized")
-    public void createGameTestUnauthorized() {
+    public void createGameTestUnauthorized() throws DataAccessException {
         clearApp.clearApp();
         boolean thrown = false;
         try {
@@ -92,7 +92,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("createGame Bad Request")
-    public void createGameTestBadRequest() {
+    public void createGameTestBadRequest() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -109,7 +109,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Happy Path for Black")
-    public void joinGameTestHappyPathBlack() {
+    public void joinGameTestHappyPathBlack() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -131,7 +131,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Happy Path for White")
-    public void joinGameTestHappyPathWhite() {
+    public void joinGameTestHappyPathWhite() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -154,7 +154,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Unauthorized")
-    public void joinGameTestUnauthorized() {
+    public void joinGameTestUnauthorized() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         ChessGame game = new ChessGame();
@@ -175,7 +175,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Bad Request Empty Player Color")
-    public void joinGameTestBadRequestEmptyPlayer() {
+    public void joinGameTestBadRequestEmptyPlayer() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -197,7 +197,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Bad Request Empty gameId")
-    public void joinGameTestBadRequestEmptyGameId() {
+    public void joinGameTestBadRequestEmptyGameId() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -219,7 +219,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Bad Request Wrong Color")
-    public void joinGameTestBadRequestWrongColor() {
+    public void joinGameTestBadRequestWrongColor() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -241,7 +241,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Already Taken White")
-    public void joinGameTestAlreadyTakenWhite() {
+    public void joinGameTestAlreadyTakenWhite() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -263,7 +263,7 @@ public class GameServiceTests {
 
     @Test
     @DisplayName("joinGame Already Taken Black")
-    public void joinGameTestAlreadyTakenBlack() {
+    public void joinGameTestAlreadyTakenBlack() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
