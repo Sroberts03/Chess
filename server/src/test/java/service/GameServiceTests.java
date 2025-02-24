@@ -40,7 +40,7 @@ public class GameServiceTests {
             thrown = true;
         }
         assert !thrown;
-        assert result.gameList().equals(gameDAO.listGames());
+        assert result.games().equals(gameDAO.listGames());
     }
 
     @Test
