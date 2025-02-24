@@ -17,7 +17,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register positive")
-    public void registerTest() {
+    public void registerTest() throws DataAccessException {
         clearApp.clearApp();
         RegisterRequest request = new RegisterRequest("sam", "123123", "123@123.123");
         boolean thrown = false;
@@ -36,7 +36,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register user already exists")
-    public void registerTestUserAlreadyExists() {
+    public void registerTestUserAlreadyExists() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("sam", "123123", "123@123.123");
         userDAO.createUser(user);
@@ -54,7 +54,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register Bad Request Empty Password")
-    public void registerTestBadRequestEmptyPassword() {
+    public void registerTestBadRequestEmptyPassword() throws DataAccessException {
         clearApp.clearApp();
         RegisterRequest request = new RegisterRequest("sam", "", "123@123.123");
         boolean thrown = false;
@@ -70,7 +70,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register Bad Request Empty Username")
-    public void registerTestBadRequestEmptyUsername() {
+    public void registerTestBadRequestEmptyUsername() throws DataAccessException {
         clearApp.clearApp();
         RegisterRequest request = new RegisterRequest("", "123123", "123@123.123");
         boolean thrown = false;
@@ -86,7 +86,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("register Bad Request Empty Email")
-    public void registerTestBadRequestEmptyEmail() {
+    public void registerTestBadRequestEmptyEmail() throws DataAccessException {
         clearApp.clearApp();
         RegisterRequest request = new RegisterRequest("sam", "123123", "");
         boolean thrown = false;
@@ -102,7 +102,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login positive")
-    public void loginTest() {
+    public void loginTest() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         userDAO.createUser(user);
@@ -122,7 +122,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad password")
-    public void loginTestBadPassword() {
+    public void loginTestBadPassword() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         userDAO.createUser(user);
@@ -141,7 +141,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad username")
-    public void loginTestBadUsername() {
+    public void loginTestBadUsername() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         userDAO.createUser(user);
@@ -160,7 +160,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("login bad username and bad password")
-    public void loginTestBadUsernameAndBadPassword() {
+    public void loginTestBadUsernameAndBadPassword() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
         userDAO.createUser(user);
@@ -179,7 +179,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("logout good auth")
-    public void logoutGoodAuth() {
+    public void logoutGoodAuth() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
@@ -196,7 +196,7 @@ public class UserServiceTests {
 
     @Test
     @DisplayName("logout bad auth")
-    public void logoutTestBadAuth() {
+    public void logoutTestBadAuth() throws DataAccessException {
         clearApp.clearApp();
         AuthData auth = new AuthData("123", "sam");
         LogoutRequest request = new LogoutRequest(auth.authToken());

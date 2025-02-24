@@ -32,7 +32,7 @@ public class ClearAppServiceTests {
 
     @Test
     @DisplayName("Clear App Error")
-    public void clearAppError() {
+    public void clearAppError() throws DataAccessException {
         clearApp.clearApp();
     }
 }
