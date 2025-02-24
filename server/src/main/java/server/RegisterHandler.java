@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
-import org.eclipse.jetty.server.Authentication;
 import resultrequest.ErrorResponse;
 import resultrequest.RegisterRequest;
 import resultrequest.RegisterResult;
@@ -24,7 +23,7 @@ public class RegisterHandler implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         Gson gson = new Gson();
         RegisterRequest req = gson.fromJson(request.body(), RegisterRequest.class);
         UserService register = new UserService(authDAO,userDAO);
