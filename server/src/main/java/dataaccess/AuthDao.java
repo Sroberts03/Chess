@@ -4,7 +4,7 @@ import model.AuthData;
 
 import java.util.Map;
 
-public interface AuthDAO {
+public interface AuthDao {
 
     void createAuth(AuthData authData);
 

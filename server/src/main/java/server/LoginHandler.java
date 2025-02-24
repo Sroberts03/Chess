@@ -1,9 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
+import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
-import dataaccess.UserDAO;
+import dataaccess.UserDao;
 import resultrequest.ErrorResponse;
 import resultrequest.LoginRequest;
 import resultrequest.LoginResult;
@@ -14,10 +14,10 @@ import spark.Route;
 
 public class LoginHandler implements Route {
 
-    private final UserDAO userDao;
-    private final AuthDAO authDao;
+    private final UserDao userDao;
+    private final AuthDao authDao;
 
-    LoginHandler(AuthDAO authDao, UserDAO userDao) {
+    LoginHandler(AuthDao authDao, UserDao userDao) {
         this.authDao = authDao;
         this.userDao = userDao;
     }

@@ -4,7 +4,7 @@ import model.GameData;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface GameDAO {
+public interface GameDao {
 
     void createGame(GameData game);
 

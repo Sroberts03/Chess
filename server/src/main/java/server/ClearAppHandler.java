@@ -1,10 +1,10 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
+import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
+import dataaccess.GameDao;
+import dataaccess.UserDao;
 import resultrequest.ErrorResponse;
 import service.ClearAppService;
 import spark.Request;
@@ -13,11 +13,11 @@ import spark.Route;
 
 public class ClearAppHandler implements Route {
 
-    private final UserDAO userDao;
-    private final AuthDAO authDao;
-    private final GameDAO gameDao;
+    private final UserDao userDao;
+    private final AuthDao authDao;
+    private final GameDao gameDao;
 
-    ClearAppHandler(AuthDAO authDao, UserDAO userDao, GameDAO gameDao) {
+    ClearAppHandler(AuthDao authDao, UserDao userDao, GameDao gameDao) {
         this.authDao = authDao;
         this.userDao = userDao;
         this.gameDao = gameDao;

@@ -1,9 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
+import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
-import dataaccess.UserDAO;
+import dataaccess.UserDao;
 import resultrequest.ErrorResponse;
 import resultrequest.RegisterRequest;
 import resultrequest.RegisterResult;
@@ -14,10 +14,10 @@ import spark.Route;
 
 public class RegisterHandler implements Route {
 
-    private final UserDAO userDao;
-    private final AuthDAO authDao;
+    private final UserDao userDao;
+    private final AuthDao authDao;
 
-    public RegisterHandler(AuthDAO authDao, UserDAO userDao) {
+    public RegisterHandler(AuthDao authDao, UserDao userDao) {
         this.userDao = userDao;
         this.authDao = authDao;
     }

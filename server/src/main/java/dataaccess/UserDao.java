@@ -4,7 +4,7 @@ import model.UserData;
 
 import java.util.Map;
 
-public interface UserDAO {
+public interface UserDao {
 
     void createUser(UserData user);
 

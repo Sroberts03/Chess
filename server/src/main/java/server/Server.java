@@ -5,9 +5,9 @@ import spark.*;
 
 public class Server {
 
-    private static final AuthDAO authDao = new MemoryAuthDAO();
-    private static final UserDAO userDao = new MemoryUserDAO();
-    private static final GameDAO gameDao = new MemoryGameDAO();
+    private static final AuthDao authDao = new MemoryAuthDao();
+    private static final UserDao userDao = new MemoryUserDao();
+    private static final GameDao gameDao = new MemoryGameDao();
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);

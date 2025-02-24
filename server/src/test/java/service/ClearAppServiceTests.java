@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 public class ClearAppServiceTests {
 
-    private final GameDAO gameDAO = new MemoryGameDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final UserDAO userDAO = new MemoryUserDAO();
+    private final GameDao gameDAO = new MemoryGameDao();
+    private final AuthDao authDAO = new MemoryAuthDao();
+    private final UserDao userDAO = new MemoryUserDao();
     private final ClearAppService clearApp = new ClearAppService(gameDAO,authDAO,userDAO);
 
     @Test

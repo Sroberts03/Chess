@@ -1,9 +1,9 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
+import dataaccess.AuthDao;
 import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
+import dataaccess.GameDao;
 import resultrequest.ErrorResponse;
 import resultrequest.JoinGameRequest;
 import service.GameService;
@@ -13,10 +13,10 @@ import spark.Route;
 
 public class JoinGameHandler implements Route {
 
-    private final AuthDAO authDao;
-    private final GameDAO gameDao;
+    private final AuthDao authDao;
+    private final GameDao gameDao;
 
-    JoinGameHandler(AuthDAO authDOA, GameDAO gameDao) {
+    JoinGameHandler(AuthDao authDOA, GameDao gameDao) {
         this.authDao = authDOA;
         this.gameDao = gameDao;
     }
