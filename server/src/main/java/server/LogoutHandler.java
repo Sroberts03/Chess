@@ -1,13 +1,43 @@
 package server;
 
+import com.google.gson.Gson;
+import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
+import dataaccess.UserDAO;
+import resultrequest.ErrorResponse;
+import resultrequest.LogoutRequest;
+import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class LogoutHandler implements Route {
 
+    private final UserDAO userDAO;
+    private final AuthDAO authDAO;
+
+    LogoutHandler(AuthDAO authDAO, UserDAO userDAO){
+        this.userDAO = userDAO;
+        this.authDAO = authDAO;
+    }
+
     @Override
-    public Object handle(Request request, Response response) throws Exception {
-        return "not implemented";
+    public Object handle(Request request, Response response) {
+        Gson gson = new Gson();
+        LogoutRequest req = new LogoutRequest(request.headers("Authorization"));
+        UserService logout = new UserService(authDAO, userDAO);
+        try {
+            logout.logout(req);
+            Object res = gson.toJson(null);
+            response.status(200);
+            return res;
+        } catch (DataAccessException e) {
+            if (e.getMessage().equals("Error: unauthorized")) {
+                response.status(401);
+                ErrorResponse res = new ErrorResponse("Error: unauthorized");
+                return gson.toJson(res);
+            }
+        }
+        return null;
     }
 }
