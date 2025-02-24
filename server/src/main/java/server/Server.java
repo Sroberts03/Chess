@@ -30,12 +30,12 @@ public class Server {
     }
 
     public static void createRoutes() {
+        Spark.delete("/db", new ClearAppHandler(authDAO,userDAO,gameDAO)); //clearApp
         Spark.post("/user", new RegisterHandler(authDAO, userDAO)); //register
-        Spark.post("/session", new LoginHandler(authDAO,userDAO)); //login
-        Spark.delete("/session", new LogoutHandler()); //logout
+        Spark.post("/session", new LoginHandler(authDAO, userDAO));//login
+        Spark.delete("/session", new LogoutHandler(authDAO, userDAO)); //logout
         Spark.get("/game", new ListGamesHandler()); //listGames
         Spark.post("/game", new CreateGameHandler()); //createGame
         Spark.put("/game", new JoinGameHandler()); //joinGame
-        Spark.delete("/db", new ClearAppHandler(authDAO,userDAO,gameDAO)); //clearApp
     }
 }
