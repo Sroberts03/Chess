@@ -31,7 +31,7 @@ public class Server {
 
     public static void createRoutes() {
         Spark.post("/user", new RegisterHandler(authDAO, userDAO)); //register
-        Spark.post("/session", new LoginHandler()); //login
+        Spark.post("/session", new LoginHandler(authDAO,userDAO)); //login
         Spark.delete("/session", new LogoutHandler()); //logout
         Spark.get("/game", new ListGamesHandler()); //listGames
         Spark.post("/game", new CreateGameHandler()); //createGame
