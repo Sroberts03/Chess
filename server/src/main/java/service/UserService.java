@@ -10,7 +10,7 @@ public class UserService {
     private final AuthDAO authDAO;
     private final UserDAO userDAO;
 
-    UserService(AuthDAO authDAO, UserDAO userDAO) {
+    public UserService(AuthDAO authDAO, UserDAO userDAO) {
         this.authDAO = authDAO;
         this.userDAO = userDAO;
     }
