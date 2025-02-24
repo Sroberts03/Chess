@@ -68,7 +68,7 @@ public class GameServiceTests {
         boolean thrown = false;
         CreateGameResult result = null;
         try {
-            result = gameService.createGame(new CreateGameRequest(auth.authToken(), "123"));
+            result = gameService.createGame(new CreateGameRequest("gameTest"),"123");
         } catch (DataAccessException e) {
             thrown = true;
         }
@@ -81,7 +81,7 @@ public class GameServiceTests {
         clearApp.clearApp();
         boolean thrown = false;
         try {
-            gameService.createGame(new CreateGameRequest("testGame", "123"));
+            gameService.createGame(new CreateGameRequest("testGame"), "123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: unauthorized")) {
                 thrown = true;
@@ -98,7 +98,7 @@ public class GameServiceTests {
         authDAO.createAuth(auth);
         boolean thrown = false;
         try {
-            gameService.createGame(new CreateGameRequest("", "123"));
+            gameService.createGame(new CreateGameRequest(""), "123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -118,9 +118,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("black",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("black",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request, "123");
         } catch (DataAccessException e) {
             thrown = true;
         }
@@ -140,9 +140,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("White",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("White",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request, "123");
         } catch (DataAccessException e) {
             thrown = true;
         }
@@ -162,9 +162,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("White",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("White",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request, "123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: unauthorized")) {
                 thrown = true;
@@ -184,9 +184,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request,"123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -206,9 +206,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("black",null,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("black",null);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request,"123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -228,9 +228,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("purple",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("purple",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request,"123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: bad request")) {
                 thrown = true;
@@ -250,9 +250,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("white",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("white",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request, "123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: already taken")) {
                 thrown = true;
@@ -272,9 +272,9 @@ public class GameServiceTests {
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
-        JoinGameRequest request = new JoinGameRequest("black",123,auth.authToken());
+        JoinGameRequest request = new JoinGameRequest("black",123);
         try {
-            gameService.joinGame(request);
+            gameService.joinGame(request,"123");
         } catch (DataAccessException e) {
             if (e.getMessage().equals("Error: already taken")) {
                 thrown = true;

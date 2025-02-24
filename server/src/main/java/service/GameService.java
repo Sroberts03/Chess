@@ -31,8 +31,7 @@ public class GameService {
         return new GameListResult(listOfGames);
     }
 
-    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws DataAccessException {
-        String auth = createGameRequest.authToken();
+    public CreateGameResult createGame(CreateGameRequest createGameRequest, String auth) throws DataAccessException {
         AuthData authDb = authDAO.getAuth(auth);
         if (createGameRequest.gameName().isEmpty()) {
             throw new Error400("Error: bad request");
@@ -47,8 +46,7 @@ public class GameService {
         return new CreateGameResult(gameData.gameID());
     }
 
-    public void joinGame(JoinGameRequest joinGameRequest) throws DataAccessException {
-        String auth = joinGameRequest.authToken();
+    public void joinGame(JoinGameRequest joinGameRequest, String auth) throws DataAccessException {
         AuthData authDb = authDAO.getAuth(auth);
         String desiredColor = joinGameRequest.playerColor();
         if (desiredColor.isEmpty() || joinGameRequest.gameID() == null
