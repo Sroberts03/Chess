@@ -14,19 +14,19 @@ import spark.Route;
 
 public class RegisterHandler implements Route {
 
-    private final UserDAO userDAO;
-    private final AuthDAO authDAO;
+    private final UserDAO userDao;
+    private final AuthDAO authDao;
 
-    public RegisterHandler(AuthDAO authDAO, UserDAO userDAO) {
-        this.userDAO = userDAO;
-        this.authDAO = authDAO;
+    public RegisterHandler(AuthDAO authDao, UserDAO userDao) {
+        this.userDao = userDao;
+        this.authDao = authDao;
     }
 
     @Override
     public Object handle(Request request, Response response) {
         Gson gson = new Gson();
         RegisterRequest req = gson.fromJson(request.body(), RegisterRequest.class);
-        UserService register = new UserService(authDAO,userDAO);
+        UserService register = new UserService(authDao,userDao);
         try {
             RegisterResult result = register.register(req);
             Object res = gson.toJson(result);

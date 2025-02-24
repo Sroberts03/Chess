@@ -9,11 +9,11 @@ import resultrequest.*;
 
 public class UserServiceTests {
 
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final GameDAO gameDao = new MemoryGameDAO();
     private final AuthDAO authDAO = new MemoryAuthDAO();
     private final UserDAO userDAO = new MemoryUserDAO();
     private final UserService userService = new UserService(authDAO,userDAO);
-    private final ClearAppService clearApp = new ClearAppService(gameDAO,authDAO,userDAO);
+    private final ClearAppService clearApp = new ClearAppService(gameDao,authDAO,userDAO);
 
     @Test
     @DisplayName("register positive")

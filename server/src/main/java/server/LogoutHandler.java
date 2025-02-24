@@ -13,19 +13,19 @@ import spark.Route;
 
 public class LogoutHandler implements Route {
 
-    private final UserDAO userDAO;
-    private final AuthDAO authDAO;
+    private final UserDAO userDao;
+    private final AuthDAO authDao;
 
-    LogoutHandler(AuthDAO authDAO, UserDAO userDAO){
-        this.userDAO = userDAO;
-        this.authDAO = authDAO;
+    LogoutHandler(AuthDAO authDao, UserDAO userDao){
+        this.userDao = userDao;
+        this.authDao = authDao;
     }
 
     @Override
     public Object handle(Request request, Response response) {
         Gson gson = new Gson();
         LogoutRequest req = new LogoutRequest(request.headers("Authorization"));
-        UserService logout = new UserService(authDAO, userDAO);
+        UserService logout = new UserService(authDao, userDao);
         try {
             logout.logout(req);
             Object res = gson.toJson(null);

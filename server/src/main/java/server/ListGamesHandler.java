@@ -14,19 +14,19 @@ import spark.Route;
 
 public class ListGamesHandler implements Route {
 
-    private final GameDAO gameDAO;
-    private final AuthDAO authDAO;
+    private final GameDAO gameDao;
+    private final AuthDAO authDao;
 
-    ListGamesHandler(GameDAO gameDAO, AuthDAO authDAO){
-        this.gameDAO = gameDAO;
-        this.authDAO = authDAO;
+    ListGamesHandler(GameDAO gameDao, AuthDAO authDao){
+        this.gameDao = gameDao;
+        this.authDao = authDao;
     }
 
     @Override
     public Object handle(Request request, Response response) {
         Gson gson = new Gson();
         GameListRequest req = new GameListRequest(request.headers("Authorization"));
-        GameService gameService = new GameService(authDAO, gameDAO);
+        GameService gameService = new GameService(authDao, gameDao);
         try {
             GameListResult res = gameService.getGames(req);
             response.status(200);
