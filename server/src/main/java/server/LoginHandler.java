@@ -14,19 +14,19 @@ import spark.Route;
 
 public class LoginHandler implements Route {
 
-    private final UserDAO userDAO;
-    private final AuthDAO authDAO;
+    private final UserDAO userDao;
+    private final AuthDAO authDao;
 
-    LoginHandler(AuthDAO authDAO, UserDAO userDAO) {
-        this.authDAO = authDAO;
-        this.userDAO = userDAO;
+    LoginHandler(AuthDAO authDao, UserDAO userDao) {
+        this.authDao = authDao;
+        this.userDao = userDao;
     }
 
     @Override
     public Object handle(Request request, Response response) {
         Gson gson = new Gson();
         LoginRequest req = gson.fromJson(request.body(), LoginRequest.class);
-        UserService userService = new UserService(authDAO,userDAO);
+        UserService userService = new UserService(authDao,userDao);
         try {
             LoginResult result = userService.login(req);
             Object res = gson.toJson(result);

@@ -13,20 +13,20 @@ import spark.Route;
 
 public class ClearAppHandler implements Route {
 
-    private final UserDAO userDAO;
-    private final AuthDAO authDAO;
-    private final GameDAO gameDAO;
+    private final UserDAO userDao;
+    private final AuthDAO authDao;
+    private final GameDAO gameDao;
 
-    ClearAppHandler(AuthDAO authDAO, UserDAO userDAO, GameDAO gameDAO) {
-        this.authDAO = authDAO;
-        this.userDAO = userDAO;
-        this.gameDAO = gameDAO;
+    ClearAppHandler(AuthDAO authDao, UserDAO userDao, GameDAO gameDao) {
+        this.authDao = authDao;
+        this.userDao = userDao;
+        this.gameDao = gameDao;
     }
 
     @Override
     public Object handle(Request request, Response response) {
         Gson gson = new Gson();
-        ClearAppService clearApp = new ClearAppService(gameDAO,authDAO,userDAO);
+        ClearAppService clearApp = new ClearAppService(gameDao,authDao,userDao);
         try{
             clearApp.clearApp();
             Object res = gson.toJson(null);
