@@ -1,8 +1,13 @@
 package server;
 
+import dataaccess.*;
 import spark.*;
 
 public class Server {
+
+    private static final AuthDAO authDAO = new MemoryAuthDAO();
+    private static final UserDAO userDAO = new MemoryUserDAO();
+    private final GameDAO gameDAO = new MemoryGameDAO();
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -10,7 +15,7 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
-//        createRoutes();
+        createRoutes();
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
@@ -24,13 +29,13 @@ public class Server {
         Spark.awaitStop();
     }
 
-//    public static void createRoutes() {
-//        Spark.post("/user", registerHandler); //register
-//        Spark.post("/session", ); //login
-//        Spark.delete("/session", ); //logout
-//        Spark.get("/game", ); //listGames
-//        Spark.post("/game", ); //createGame
-//        Spark.put("/game", ); //joinGame
-//        Spark.delete("/db", ); //clearApp
-//    }
+    public static void createRoutes() {
+        Spark.post("/user", new RegisterHandler(authDAO, userDAO)); //register
+        Spark.post("/session", new LoginHandler()); //login
+        Spark.delete("/session", new LogoutHandler()); //logout
+        Spark.get("/game", new ListGamesHandler()); //listGames
+        Spark.post("/game", new CreateGameHandler()); //createGame
+        Spark.put("/game", new JoinGameHandler()); //joinGame
+        Spark.delete("/db", new ClearAppHandler()); //clearApp
+    }
 }
