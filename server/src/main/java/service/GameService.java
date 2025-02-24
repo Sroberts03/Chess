@@ -41,7 +41,7 @@ public class GameService {
         }
         String gameName = createGameRequest.gameName();
         ChessGame newGame = new ChessGame();
-        GameData gameData = new GameData(gameDAO.createGameId(),"","",gameName,newGame);
+        GameData gameData = new GameData(gameDAO.createGameId(),null,null,gameName,newGame);
         gameDAO.createGame(gameData);
         return new CreateGameResult(gameData.gameID());
     }
@@ -49,7 +49,9 @@ public class GameService {
     public void joinGame(JoinGameRequest joinGameRequest, String auth) throws DataAccessException {
         AuthData authDb = authDAO.getAuth(auth);
         String desiredColor = joinGameRequest.playerColor();
-        if (desiredColor.isEmpty() || joinGameRequest.gameID() == null
+
+        if ((desiredColor == null || desiredColor.isEmpty()) ||
+                joinGameRequest.gameID() == null
                 || !desiredColor.toLowerCase(Locale.ROOT).equals("black")
                 && !desiredColor.toLowerCase(Locale.ROOT).equals("white")) {
             throw new Error400("Error: bad request");
@@ -59,7 +61,7 @@ public class GameService {
         }
         GameData game = gameDAO.getGame(joinGameRequest.gameID());
         if (desiredColor.toLowerCase(Locale.ROOT).equals("black")) {
-            if (!game.blackUsername().isEmpty()) {
+            if (!(game.blackUsername() == null)) {
                 throw new Error403("Error: already taken");
             }
             GameData updatedGame = new GameData(game.gameID(),game.whiteUsername(),
@@ -67,7 +69,7 @@ public class GameService {
             gameDAO.updateGame(updatedGame);
         }
         if (desiredColor.toLowerCase(Locale.ROOT).equals("white")) {
-            if (!game.whiteUsername().isEmpty()) {
+            if (!(game.whiteUsername() == null)) {
                 throw new Error403("Error: already taken");
             }
             GameData updatedGame = new GameData(game.gameID(),authDb.username(),
