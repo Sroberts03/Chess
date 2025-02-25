@@ -5,9 +5,9 @@ import spark.*;
 
 public class Server {
 
-    private static final AuthDao authDao = new MemoryAuthDao();
-    private static final UserDao userDao = new MemoryUserDao();
-    private static final GameDao gameDao = new MemoryGameDao();
+    private static final AuthDao AUTH_DAO = new MemoryAuthDao();
+    private static final UserDao USER_DAO = new MemoryUserDao();
+    private static final GameDao GAME_DAO = new MemoryGameDao();
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -30,12 +30,12 @@ public class Server {
     }
 
     public static void createRoutes() {
-        Spark.delete("/db", new ClearAppHandler(authDao,userDao,gameDao)); //clearApp
-        Spark.post("/user", new RegisterHandler(authDao, userDao)); //register
-        Spark.post("/session", new LoginHandler(authDao, userDao));//login
-        Spark.delete("/session", new LogoutHandler(authDao, userDao)); //logout
-        Spark.get("/game", new ListGamesHandler(gameDao, authDao)); //listGames
-        Spark.post("/game", new CreateGameHandler(authDao, gameDao)); //createGame
-        Spark.put("/game", new JoinGameHandler(authDao,gameDao)); //joinGame
+        Spark.delete("/db", new ClearAppHandler(AUTH_DAO,USER_DAO,GAME_DAO)); //clearApp
+        Spark.post("/user", new RegisterHandler(AUTH_DAO, USER_DAO)); //register
+        Spark.post("/session", new LoginHandler(AUTH_DAO, USER_DAO));//login
+        Spark.delete("/session", new LogoutHandler(AUTH_DAO, USER_DAO)); //logout
+        Spark.get("/game", new ListGamesHandler(GAME_DAO, AUTH_DAO)); //listGames
+        Spark.post("/game", new CreateGameHandler(AUTH_DAO, GAME_DAO)); //createGame
+        Spark.put("/game", new JoinGameHandler(AUTH_DAO,GAME_DAO)); //joinGame
     }
 }
