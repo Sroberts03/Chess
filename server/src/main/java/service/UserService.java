@@ -21,7 +21,9 @@ public class UserService {
         String email = registerRequest.email();
         UserData user = userDAO.getUser(username);
         AuthData newAuth = null;
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if ((username == null || username.isEmpty())
+                || (password == null || password.isEmpty())
+                || (email == null || email.isEmpty())) {
             throw new Error400("Error: bad request");
         }
         if (user == null) {
