@@ -6,11 +6,11 @@ import java.util.Map;
 
 public interface UserDao {
 
-    void createUser(UserData user);
+    void createUser(UserData user) throws DataAccessException;
 
-    UserData getUser(String username);
+    UserData getUser(String username) throws DataAccessException;
 
-    void clearUser();
+    void clearUser() throws DataAccessException;
 
     Map<String, UserData> getUserMap();
 
