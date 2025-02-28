@@ -6,13 +6,13 @@ import java.util.Map;
 
 public interface AuthDao {
 
-    void createAuth(AuthData authData);
+    void createAuth(AuthData authData) throws DataAccessException;
 
-    AuthData getAuth(String authToken);
+    AuthData getAuth(String authToken) throws DataAccessException;
 
-    void removeAuth(String authToken);
+    void removeAuth(String authToken) throws DataAccessException;
 
-    void clearAuth();
+    void clearAuth() throws DataAccessException;
 
     String generateToken();
 
