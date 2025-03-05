@@ -33,12 +33,9 @@ public class ClearAppHandler implements Route {
             response.status(200);
             return res;
         } catch (DataAccessException e) {
-            if (e.getMessage().equals("Error: (description of error)")) {
-                response.status(500);
-                ErrorResponse res = new ErrorResponse("Error: (description of error)");
-                return gson.toJson(res);
-            }
+            response.status(500);
+            ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+            return gson.toJson(error);
         }
-        return null;
     }
 }

@@ -38,12 +38,11 @@ public class LoginHandler implements Route {
                 ErrorResponse error = new ErrorResponse("Error: unauthorized");
                 return gson.toJson(error);
             }
-            if (e.getMessage().equals("Error: (description of error)")) {
+            else {
                 response.status(500);
-                ErrorResponse error = new ErrorResponse("Error: (description of error)");
+                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
                 return gson.toJson(error);
             }
         }
-        return null;
     }
 }

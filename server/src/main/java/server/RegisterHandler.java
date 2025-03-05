@@ -43,7 +43,11 @@ public class RegisterHandler implements Route {
                 ErrorResponse error = new ErrorResponse("Error: already taken");
                 return gson.toJson(error);
             }
+            else {
+                response.status(500);
+                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+                return gson.toJson(error);
+            }
         }
-        return response;
     }
 }

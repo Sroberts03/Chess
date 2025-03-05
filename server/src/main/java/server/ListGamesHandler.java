@@ -37,7 +37,11 @@ public class ListGamesHandler implements Route {
                 ErrorResponse error = new ErrorResponse("Error: unauthorized");
                 return gson.toJson(error);
             }
+            else {
+                response.status(500);
+                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+                return gson.toJson(error);
+            }
         }
-        return null;
     }
 }

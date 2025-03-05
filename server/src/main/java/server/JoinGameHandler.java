@@ -46,7 +46,11 @@ public class JoinGameHandler implements Route {
                ErrorResponse res = new ErrorResponse("Error: unauthorized");
                return gson.toJson(res);
            }
+           else {
+               response.status(500);
+               ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+               return gson.toJson(error);
+           }
        }
-       return null;
     }
 }

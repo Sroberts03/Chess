@@ -42,7 +42,11 @@ public class CreateGameHandler implements Route {
                 ErrorResponse error = new ErrorResponse("Error: bad request");
                 return gson.toJson(error);
             }
+            else {
+                response.status(500);
+                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+                return gson.toJson(error);
+            }
         }
-        return null;
     }
 }
