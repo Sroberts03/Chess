@@ -1,16 +1,18 @@
 package dataaccess;
 
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 import java.util.Map;
-import static dataaccess.DatabaseManager.getConnection;
+import static dataaccess.DatabaseManager.*;
 
 
 public class SqlUserDao implements UserDao{
 
     public SqlUserDao() throws DataAccessException {
         try {
-            configureDatabase();
+            DatabaseManager.configureDatabase(createStatements);
         } catch (DataAccessException e) {
             throw new Error500(e.getMessage());
         }
@@ -21,16 +23,11 @@ public class SqlUserDao implements UserDao{
         String sql = "insert into userData (username, password, email) values (?,?,?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement query = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);
+            String hashedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt());
             query.setString(1, user.username());
-            query.setString(2, user.password());
+            query.setString(2, hashedPassword);
             query.setString(3, user.email());
-            if (query.executeUpdate() == 1) {
-                conn.commit();
-            }
-            else {
-                conn.rollback();
-            }
+            query.executeUpdate();
         } catch (SQLException e) {
             throw new Error500(e.getMessage());
         }
@@ -71,19 +68,6 @@ public class SqlUserDao implements UserDao{
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
-
-    private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (var conn = getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException e) {
-            throw new Error500(e.getMessage());
-        }
-    }
 
     @Override
     public Map<String, UserData> getUserMap() {

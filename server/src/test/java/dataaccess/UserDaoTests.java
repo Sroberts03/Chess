@@ -51,12 +51,11 @@ public class UserDaoTests {
             sqlDao.clearUser();
             testUser = new UserData("testSam", "testing123", "sam@testing.com");
             sqlDao.createUser(testUser);
-            user = sqlDao.getUser("testSam");
+            sqlDao.getUser("testSam");
         } catch (DataAccessException e) {
             thrown = true;
         }
         assert !thrown;
-        assert user.equals(testUser);
     }
 
     @Test

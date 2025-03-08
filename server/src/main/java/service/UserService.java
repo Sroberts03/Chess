@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import resultrequest.*;
 
 public class UserService {
@@ -45,7 +46,7 @@ public class UserService {
         if (user == null) {
             throw new Error401("Error: unauthorized");
         }
-        if (!user.password().equals(password)) {
+        if (!BCrypt.checkpw(password, user.password())) {
             throw new Error401("Error: unauthorized");
         }
         AuthData auth = new AuthData(authDAO.generateToken(),username);

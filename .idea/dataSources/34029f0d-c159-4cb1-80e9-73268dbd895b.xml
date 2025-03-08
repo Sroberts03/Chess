@@ -28,123 +28,53 @@
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="8" parent="6" name="gameData">
+    <table id="8" parent="6" name="userData">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
-    <table id="9" parent="6" name="userData">
-      <Engine>InnoDB</Engine>
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </table>
-    <table id="10" parent="6" name="userToGame">
-      <Engine>InnoDB</Engine>
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
-    </table>
-    <column id="11" parent="7" name="username">
+    <column id="9" parent="7" name="username">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="12" parent="7" name="authToken">
+    <column id="10" parent="7" name="authToken">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <foreign-key id="13" parent="7" name="authdata_ibfk_1">
+    <foreign-key id="11" parent="7" name="authdata_ibfk_1">
       <ColNames>username</ColNames>
       <RefColNames>username</RefColNames>
       <RefTableName>userData</RefTableName>
     </foreign-key>
-    <index id="14" parent="7" name="username">
+    <index id="12" parent="7" name="username">
       <ColNames>username</ColNames>
       <Type>btree</Type>
     </index>
-    <column id="15" parent="8" name="gameId">
-      <AutoIncrement>1</AutoIncrement>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>int|0s</StoredType>
-    </column>
-    <column id="16" parent="8" name="whiteUsername">
-      <Position>2</Position>
-      <StoredType>varchar(100)|0s</StoredType>
-    </column>
-    <column id="17" parent="8" name="blackUsername">
-      <Position>3</Position>
-      <StoredType>varchar(100)|0s</StoredType>
-    </column>
-    <column id="18" parent="8" name="gameName">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>varchar(100)|0s</StoredType>
-    </column>
-    <column id="19" parent="8" name="chessGame">
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-      <StoredType>json|0s</StoredType>
-    </column>
-    <index id="20" parent="8" name="PRIMARY">
-      <ColNames>gameId</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="21" parent="8" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="22" parent="9" name="username">
+    <column id="13" parent="8" name="username">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="23" parent="9" name="password">
+    <column id="14" parent="8" name="password">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <column id="24" parent="9" name="email">
+    <column id="15" parent="8" name="email">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <index id="25" parent="9" name="PRIMARY">
+    <index id="16" parent="8" name="PRIMARY">
       <ColNames>username</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="26" parent="9" name="PRIMARY">
+    <key id="17" parent="8" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="27" parent="10" name="gameId">
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>int|0s</StoredType>
-    </column>
-    <column id="28" parent="10" name="username">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>varchar(100)|0s</StoredType>
-    </column>
-    <foreign-key id="29" parent="10" name="usertogame_ibfk_1">
-      <ColNames>gameId</ColNames>
-      <RefColNames>gameId</RefColNames>
-      <RefTableName>gameData</RefTableName>
-    </foreign-key>
-    <foreign-key id="30" parent="10" name="usertogame_ibfk_2">
-      <ColNames>username</ColNames>
-      <RefColNames>username</RefColNames>
-      <RefTableName>userData</RefTableName>
-    </foreign-key>
-    <index id="31" parent="10" name="gameId">
-      <ColNames>gameId</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="32" parent="10" name="username">
-      <ColNames>username</ColNames>
-      <Type>btree</Type>
-    </index>
   </database-model>
 </dataSource>
