@@ -18,7 +18,7 @@ public class GameDaoTests {
     public void createGameGoodTest() {
         boolean thrown = false;
         ChessGame game = new ChessGame();
-        GameData gameData = new GameData(0, null, null, "testGame2", game);
+        GameData gameData = new GameData(12, null, null, "testGame2", game);
         try {
             sqlGameDao.clearGame();
             sqlGameDao.createGame(gameData);
@@ -44,19 +44,38 @@ public class GameDaoTests {
         assert thrown;
     }
 
-//    @Test
-//    @DisplayName("get Game good test")
-//    public void getGameGoodTest() {
-//        boolean thrown = false;
-//        ChessGame game = new ChessGame();
-//        GameData gameData = new GameData(0, null, null, "testGame2", game);
-//        try {
-//            sqlGameDao.clearGame();
-//            sqlGameDao.createGame(gameData);
-//            GameData sqlGameData = sqlGameDao.getGame()
-//        } catch (DataAccessException e) {
-//            thrown = true;
-//        }
-//        assert thrown;
-//    }
+    @Test
+    @DisplayName("get Game good test")
+    public void getGameGoodTest() {
+        boolean thrown = false;
+        ChessGame game = new ChessGame();
+        GameData gameData = new GameData(0, null, null, "testGame2", game);
+        GameData sqlGameData = null;
+        try {
+            sqlGameDao.clearGame();
+            sqlGameDao.createGame(gameData);
+            sqlGameData = sqlGameDao.getGame(0);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+        assert sqlGameData.equals(gameData);
+    }
+
+    @Test
+    @DisplayName("get Game bad test")
+    public void getGameBadTest() {
+        boolean thrown = false;
+        ChessGame game = new ChessGame();
+        GameData gameData = new GameData(0, null, null, "testGame2", game);
+        GameData sqlGameData = null;
+        try {
+            sqlGameDao.clearGame();
+            sqlGameDao.createGame(gameData);
+            sqlGameData = sqlGameDao.getGame(1);
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
 }

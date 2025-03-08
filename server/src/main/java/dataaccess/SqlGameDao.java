@@ -24,15 +24,16 @@ public class SqlGameDao implements GameDao{
 
     @Override
     public void createGame(GameData game) throws DataAccessException {
-        String sql = "insert into gameData (whiteUsername, blackUsername, gameName, chessGame) values (?,?,?,?)";
+        String sql = "insert into gameData (gameId, whiteUsername, blackUsername, gameName, chessGame) values (?,?,?,?,?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement query = conn.prepareStatement(sql)) {
             Gson gson = new Gson();
             String gameJson = gson.toJson(game.game());
-            query.setString(1, game.whiteUsername());
-            query.setString(2, game.blackUsername());
-            query.setString(3, game.gameName());
-            query.setString(4, gameJson);
+            query.setInt(1, game.gameID());
+            query.setString(2, game.whiteUsername());
+            query.setString(3, game.blackUsername());
+            query.setString(4, game.gameName());
+            query.setString(5, gameJson);
             query.executeUpdate();
         } catch (SQLException e) {
             throw new Error500(e.getMessage());
@@ -45,7 +46,7 @@ public class SqlGameDao implements GameDao{
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement query = conn.prepareStatement(sql)) {
             Gson gson = new Gson();
-            query.setString(1, String.valueOf(gameID));
+            query.setInt(1, gameID);
             ResultSet rs = query.executeQuery();
             rs.next();
             String gameString = rs.getString(5);
@@ -69,7 +70,13 @@ public class SqlGameDao implements GameDao{
 
     @Override
     public void clearGame() throws DataAccessException {
+        String sql = "delete from gameData";
 
+        try (Connection conn = DatabaseManager.getConnection(); PreparedStatement query = conn.prepareStatement(sql)) {
+            query.executeUpdate();
+        } catch (SQLException e) {
+            throw new Error500(e.getMessage());
+        }
     }
 
     @Override
