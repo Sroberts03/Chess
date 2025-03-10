@@ -5,6 +5,8 @@ import model.GameData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class GameDaoTests {
 
     private final GameDao sqlGameDao = new SqlGameDao();
@@ -78,4 +80,48 @@ public class GameDaoTests {
         }
         assert thrown;
     }
+
+    @Test
+    @DisplayName("list Games good test")
+    public void listGameGoodTest() {
+        boolean thrown = false;
+        ChessGame game = new ChessGame();
+        GameData gameData = new GameData(0, null, null, "testGame", game);
+        GameData gameData2 = new GameData(1, null,null, "testGame2", game);
+        ArrayList<GameData> testList = new ArrayList<>();
+        testList.add(gameData);
+        testList.add(gameData2);
+        ArrayList<GameData> list = new ArrayList<>();
+        try {
+            sqlGameDao.clearGame();
+            sqlGameDao.createGame(gameData);
+            sqlGameDao.createGame(gameData2);
+            list = sqlGameDao.listGames();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+        assert list.equals(testList);
+    }
+
+    @Test
+    @DisplayName("list Games bad test")
+    public void listGameBadTest() {
+        boolean thrown = false;
+        ChessGame game = new ChessGame();
+        GameData gameData = new GameData(0, null, null, "testGame", game);
+        GameData gameData2 = new GameData(1, null,null, "testGame2", game);
+        try {
+            sqlGameDao.clearGame();
+            sqlGameDao.createGame(gameData);
+            sqlGameDao.createGame(gameData2);
+            sqlGameDao.createGame(gameData);
+            sqlGameDao.listGames();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
+
+
 }

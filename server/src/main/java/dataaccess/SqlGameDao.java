@@ -60,10 +60,31 @@ public class SqlGameDao implements GameDao{
 
     @Override
     public ArrayList<GameData> listGames() throws DataAccessException {
-        return null;
+        ArrayList<GameData> games = new ArrayList<>();
+        String sql = "select * from gameData";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement query = conn.prepareStatement(sql)) {
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                games.add(readGame(rs));
+            }
+            return games;
+        } catch (SQLException e) {
+            throw new Error500(e.getMessage());
+        }
     }
 
-    @Override
+    private GameData readGame(ResultSet rs) throws SQLException {
+        Gson gson = new Gson();
+        int id = rs.getInt("gameId");
+        String white = rs.getString("whiteUsername");
+        String black = rs.getString("blackUsername");
+        String gameName = rs.getString("gameName");
+        ChessGame game = gson.fromJson(rs.getString("chessGame"), ChessGame.class);
+        return new GameData(id,white,black,gameName,game);
+    }
+
+        @Override
     public void updateGame(GameData game) throws DataAccessException {
 
     }
