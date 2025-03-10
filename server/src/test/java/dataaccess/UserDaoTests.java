@@ -96,7 +96,4 @@ public class UserDaoTests {
         }
         assert !thrown;
     }
-
-
-
 }

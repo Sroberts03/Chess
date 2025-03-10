@@ -123,5 +123,27 @@ public class GameDaoTests {
         assert thrown;
     }
 
+    @Test
+    @DisplayName("clear game good")
+    public void clearUserTestGood() throws DataAccessException {
+        boolean thrown = false;
+        try {
+            sqlGameDao.clearGame();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
 
+    @Test
+    @DisplayName("clear game bad")
+    public void clearUserTestBad() throws DataAccessException {
+        boolean thrown = false;
+        try {
+            sqlGameDao.clearGame();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
 }
