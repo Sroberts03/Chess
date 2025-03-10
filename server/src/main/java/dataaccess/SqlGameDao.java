@@ -84,7 +84,7 @@ public class SqlGameDao implements GameDao{
         return new GameData(id,white,black,gameName,game);
     }
 
-        @Override
+    @Override
     public void updateGame(GameData game) throws DataAccessException {
 
     }
