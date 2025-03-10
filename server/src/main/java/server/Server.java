@@ -5,12 +5,13 @@ import spark.*;
 
 public class Server {
 
-    private static final AuthDao AUTH_DAO;
-    private static final UserDao USER_DAO;
-    private static final GameDao GAME_DAO;
+    private final AuthDao AUTH_DAO;
+    private final UserDao USER_DAO;
+    private final GameDao GAME_DAO;
 
-    static {
+    public Server() {
         try {
+            System.out.print("test string");
             AUTH_DAO = new SqlAuthDao();
             USER_DAO = new SqlUserDao();
             GAME_DAO = new SqlGameDao();
@@ -39,7 +40,7 @@ public class Server {
         Spark.awaitStop();
     }
 
-    public static void createRoutes() {
+    public void createRoutes() {
         Spark.delete("/db", new ClearAppHandler(AUTH_DAO,USER_DAO,GAME_DAO)); //clearApp
         Spark.post("/user", new RegisterHandler(AUTH_DAO, USER_DAO)); //register
         Spark.post("/session", new LoginHandler(AUTH_DAO, USER_DAO));//login

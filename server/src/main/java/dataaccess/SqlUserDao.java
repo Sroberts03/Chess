@@ -60,7 +60,7 @@ public class SqlUserDao implements UserDao{
 
     private final String[] createStatements = {
             """
-            CREATE TABLE IF NOT EXISTS  pet (
+            CREATE TABLE IF NOT EXISTS  userData (
               username varchar(100) not null,
               password varchar(100) not null,
               email varchar(100) not null,
