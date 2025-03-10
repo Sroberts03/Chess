@@ -32,16 +32,7 @@ public class LogoutHandler implements Route {
             response.status(200);
             return res;
         } catch (DataAccessException e) {
-            if (e.getMessage().equals("Error: unauthorized")) {
-                response.status(401);
-                ErrorResponse res = new ErrorResponse("Error: unauthorized");
-                return gson.toJson(res);
-            }
-            else {
-                response.status(500);
-                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
-                return gson.toJson(error);
-            }
+            return ListGamesHandler.errorReturn(e,response,gson);
         }
     }
 }

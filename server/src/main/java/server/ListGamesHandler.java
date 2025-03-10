@@ -32,16 +32,20 @@ public class ListGamesHandler implements Route {
             response.status(200);
             return gson.toJson(res);
         } catch (DataAccessException e) {
-            if (e.getMessage().equals("Error: unauthorized")) {
-                response.status(401);
-                ErrorResponse error = new ErrorResponse("Error: unauthorized");
-                return gson.toJson(error);
-            }
-            else {
-                response.status(500);
-                ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
-                return gson.toJson(error);
-            }
+            return errorReturn(e,response,gson);
+        }
+    }
+
+    public static String errorReturn(DataAccessException e, Response response, Gson gson) {
+        if (e.getMessage().equals("Error: unauthorized")) {
+            response.status(401);
+            ErrorResponse error = new ErrorResponse("Error: unauthorized");
+            return gson.toJson(error);
+        }
+        else {
+            response.status(500);
+            ErrorResponse error = new ErrorResponse("Error: " + e.getMessage());
+            return gson.toJson(error);
         }
     }
 }
