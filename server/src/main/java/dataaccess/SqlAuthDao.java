@@ -41,7 +41,9 @@ public class SqlAuthDao implements AuthDao{
              PreparedStatement query = conn.prepareStatement(sql)) {
             query.setString(1, authToken);
             ResultSet rs = query.executeQuery();
-            rs.next();
+            if (!rs.next()) {
+                return null;
+            }
             return new AuthData(rs.getString(2),rs.getString(1));
         } catch (SQLException e) {
             throw new Error500(e.getMessage());
@@ -88,7 +90,7 @@ public class SqlAuthDao implements AuthDao{
             CREATE TABLE IF NOT EXISTS  authData (
                  username varchar(100) not null,
                  authToken varchar(100) not null,
-                 primary key (username)
+                 primary key (authToken)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };

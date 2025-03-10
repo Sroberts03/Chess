@@ -19,6 +19,7 @@ public class UserService {
     public RegisterResult register(RegisterRequest registerRequest) throws DataAccessException {
         String username = registerRequest.username();
         String password = registerRequest.password();
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String email = registerRequest.email();
         UserData user = userDAO.getUser(username);
         AuthData newAuth = null;
@@ -28,7 +29,7 @@ public class UserService {
             throw new Error400("Error: bad request");
         }
         if (user == null) {
-            UserData newUser = new UserData(username, password, email);
+            UserData newUser = new UserData(username, hashedPassword, email);
             userDAO.createUser(newUser);
             newAuth = new AuthData(authDAO.generateToken(), username);
             authDAO.createAuth(newAuth);

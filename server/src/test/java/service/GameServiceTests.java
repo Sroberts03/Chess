@@ -114,7 +114,7 @@ public class GameServiceTests {
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
-        GameData gameData = new GameData(123, "", "",
+        GameData gameData = new GameData(123, null, null,
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;
@@ -136,7 +136,7 @@ public class GameServiceTests {
         AuthData auth = new AuthData("123", "sam");
         authDAO.createAuth(auth);
         ChessGame game = new ChessGame();
-        GameData gameData = new GameData(123, "", "",
+        GameData gameData = new GameData(123, null, null,
                 "test",game);
         gameDAO.createGame(gameData);
         boolean thrown = false;

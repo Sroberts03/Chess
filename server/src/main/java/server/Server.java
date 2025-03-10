@@ -5,9 +5,19 @@ import spark.*;
 
 public class Server {
 
-    private static final AuthDao AUTH_DAO = new MemoryAuthDao();
-    private static final UserDao USER_DAO = new MemoryUserDao();
-    private static final GameDao GAME_DAO = new MemoryGameDao();
+    private static final AuthDao AUTH_DAO;
+    private static final UserDao USER_DAO;
+    private static final GameDao GAME_DAO;
+
+    static {
+        try {
+            AUTH_DAO = new SqlAuthDao();
+            USER_DAO = new SqlUserDao();
+            GAME_DAO = new SqlGameDao();
+        } catch (DataAccessException e) {
+            throw new RuntimeException();
+        }
+    }
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);

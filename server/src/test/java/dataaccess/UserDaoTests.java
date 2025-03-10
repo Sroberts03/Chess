@@ -3,7 +3,6 @@ package dataaccess;
 import model.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.CDATASection;
 
 public class UserDaoTests {
 
@@ -60,7 +59,7 @@ public class UserDaoTests {
 
     @Test
     @DisplayName("get User bad")
-    public void getUserTestBad() throws DataAccessException {
+    public void getBadUserTest() throws DataAccessException {
         boolean thrown = false;
         UserData testUser = null;
         UserData user = null;
@@ -70,7 +69,7 @@ public class UserDaoTests {
         } catch (DataAccessException e) {
             thrown = true;
         }
-        assert thrown;
+        assert user == null;
     }
 
     @Test

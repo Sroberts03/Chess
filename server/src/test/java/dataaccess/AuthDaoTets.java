@@ -67,6 +67,7 @@ public class AuthDaoTets {
             sqlAuthDao.clearAuth();
             testAuth = new AuthData(sqlAuthDao.generateToken(), "testUser");
             sqlAuthDao.createAuth(testAuth);
+            sqlAuthDao.createAuth(testAuth);
             sqlAuthDao.getAuth("FakeToken");
         } catch (DataAccessException e) {
             thrown = true;

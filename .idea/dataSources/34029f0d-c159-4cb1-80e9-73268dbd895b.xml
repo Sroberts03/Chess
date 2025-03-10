@@ -47,7 +47,7 @@
       <StoredType>varchar(100)|0s</StoredType>
     </column>
     <index id="12" parent="7" name="PRIMARY">
-      <ColNames>username</ColNames>
+      <ColNames>authToken</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>

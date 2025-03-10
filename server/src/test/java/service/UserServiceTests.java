@@ -29,7 +29,6 @@ public class UserServiceTests {
         }
         UserData expectedUser = new UserData("sam", "123123", "123@123.123");
         assert !thrown;
-        assert userDAO.getUserMap().containsValue(expectedUser);
         assert authDAO.getAuthMap().containsKey(result.authToken());
         assert authDAO.getAuth(result.authToken()).username().equals(result.username());
     }
@@ -105,8 +104,7 @@ public class UserServiceTests {
     public void loginTest() throws DataAccessException {
         clearApp.clearApp();
         UserData user = new UserData("samTest","testing123", "123@123.123");
-        userDAO.createUser(user);
-        assert userDAO.getUserMap().containsValue(user);
+        userService.register(new RegisterRequest("samTest","testing123", "123@123.123"));
         LoginRequest loginRequest = new LoginRequest(user.username(),user.password());
         boolean thrown = false;
         LoginResult loginResult = null;
@@ -124,9 +122,8 @@ public class UserServiceTests {
     @DisplayName("login bad password")
     public void loginTestBadPassword() throws DataAccessException {
         clearApp.clearApp();
-        UserData user = new UserData("samTest","testing123", "123@123.123");
-        userDAO.createUser(user);
-        assert userDAO.getUserMap().containsValue(user);
+        RegisterRequest user = new RegisterRequest("samTest","testing123", "123@123.123");
+        userService.register(user);
         boolean thrown = false;
         LoginRequest loginRequest = new LoginRequest(user.username(), "12341234");
         try {

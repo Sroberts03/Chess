@@ -5,7 +5,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.Map;
-import static dataaccess.DatabaseManager.*;
 
 
 public class SqlUserDao implements UserDao{
@@ -23,9 +22,8 @@ public class SqlUserDao implements UserDao{
         String sql = "insert into userData (username, password, email) values (?,?,?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement query = conn.prepareStatement(sql)) {
-            String hashedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt());
             query.setString(1, user.username());
-            query.setString(2, hashedPassword);
+            query.setString(2, user.password());
             query.setString(3, user.email());
             query.executeUpdate();
         } catch (SQLException e) {
@@ -40,7 +38,9 @@ public class SqlUserDao implements UserDao{
         try (Connection conn = DatabaseManager.getConnection(); PreparedStatement query = conn.prepareStatement(sql)) {
             query.setString(1, username);
             ResultSet rs = query.executeQuery();
-            rs.next();
+            if (!rs.next()) {
+                return null;
+            }
             return new UserData(rs.getString(1),rs.getString(2),rs.getString(3));
         } catch (SQLException e) {
             throw new Error500(e.getMessage());
