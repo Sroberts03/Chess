@@ -106,4 +106,28 @@ public class AuthDaoTets {
         }
         assert thrown;
     }
+
+    @Test
+    @DisplayName("clear user good")
+    public void clearUserTestGood() throws DataAccessException {
+        boolean thrown = false;
+        try {
+            sqlAuthDao.clearAuth();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
+
+    @Test
+    @DisplayName("clear user bad")
+    public void clearUserTestBad() throws DataAccessException {
+        boolean thrown = false;
+        try {
+            sqlAuthDao.clearAuth();
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
 }
