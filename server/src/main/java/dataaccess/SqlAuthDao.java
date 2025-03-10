@@ -1,10 +1,12 @@
 package dataaccess;
 
 import model.AuthData;
+import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +38,17 @@ public class SqlAuthDao implements AuthDao{
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
-        return null;
+        String sql = "select * from authData where authToken = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement query = conn.prepareStatement(sql)) {
+            query.setString(1, authToken);
+            ResultSet rs = query.executeQuery();
+            rs.next();
+            return new AuthData(rs.getString(2),rs.getString(1));
+        } catch (SQLException e) {
+            throw new Error500(e.getMessage());
+        }
     }
 
     @Override

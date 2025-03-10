@@ -46,15 +46,16 @@
       <Position>2</Position>
       <StoredType>varchar(100)|0s</StoredType>
     </column>
-    <foreign-key id="12" parent="7" name="authdata_ibfk_1">
-      <ColNames>username</ColNames>
-      <RefColNames>username</RefColNames>
-      <RefTableName>userData</RefTableName>
-    </foreign-key>
-    <index id="13" parent="7" name="username">
+    <index id="12" parent="7" name="PRIMARY">
       <ColNames>username</ColNames>
       <Type>btree</Type>
+      <Unique>1</Unique>
     </index>
+    <key id="13" parent="7" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
     <column id="14" parent="8" name="gameId">
       <NotNull>1</NotNull>
       <Position>1</Position>
