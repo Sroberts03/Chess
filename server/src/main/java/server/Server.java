@@ -5,16 +5,15 @@ import spark.*;
 
 public class Server {
 
-    private final AuthDao AUTH_DAO;
-    private final UserDao USER_DAO;
-    private final GameDao GAME_DAO;
+    private final AuthDao authDao;
+    private final UserDao userDao;
+    private final GameDao gameDao;
 
     public Server() {
         try {
-            System.out.print("test string");
-            AUTH_DAO = new SqlAuthDao();
-            USER_DAO = new SqlUserDao();
-            GAME_DAO = new SqlGameDao();
+            authDao = new SqlAuthDao();
+            userDao = new SqlUserDao();
+            gameDao = new SqlGameDao();
         } catch (DataAccessException e) {
             throw new RuntimeException();
         }
@@ -41,12 +40,12 @@ public class Server {
     }
 
     public void createRoutes() {
-        Spark.delete("/db", new ClearAppHandler(AUTH_DAO,USER_DAO,GAME_DAO)); //clearApp
-        Spark.post("/user", new RegisterHandler(AUTH_DAO, USER_DAO)); //register
-        Spark.post("/session", new LoginHandler(AUTH_DAO, USER_DAO));//login
-        Spark.delete("/session", new LogoutHandler(AUTH_DAO, USER_DAO)); //logout
-        Spark.get("/game", new ListGamesHandler(GAME_DAO, AUTH_DAO)); //listGames
-        Spark.post("/game", new CreateGameHandler(AUTH_DAO, GAME_DAO)); //createGame
-        Spark.put("/game", new JoinGameHandler(AUTH_DAO,GAME_DAO)); //joinGame
+        Spark.delete("/db", new ClearAppHandler(authDao,userDao,gameDao)); //clearApp
+        Spark.post("/user", new RegisterHandler(authDao, userDao)); //register
+        Spark.post("/session", new LoginHandler(authDao, userDao));//login
+        Spark.delete("/session", new LogoutHandler(authDao, userDao)); //logout
+        Spark.get("/game", new ListGamesHandler(gameDao, authDao)); //listGames
+        Spark.post("/game", new CreateGameHandler(authDao, gameDao)); //createGame
+        Spark.put("/game", new JoinGameHandler(authDao,gameDao)); //joinGame
     }
 }
