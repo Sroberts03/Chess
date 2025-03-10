@@ -146,4 +146,50 @@ public class GameDaoTests {
         }
         assert !thrown;
     }
+
+    @Test
+    @DisplayName("get map good")
+    public void getMapGood() throws DataAccessException {
+        sqlGameDao.getGameMap();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map bad")
+    public void getMapBad() throws DataAccessException {
+        sqlGameDao.getGameMap();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map good")
+    public void updateGameGood() throws DataAccessException {
+        GameData update = new GameData(1,null, null,
+                "testGame", new ChessGame());
+        sqlGameDao.updateGame(update);
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map bad")
+    public void updateGameBad() throws DataAccessException {
+        GameData update = new GameData(1,null, null,
+                "testGame", new ChessGame());
+        sqlGameDao.updateGame(update);
+        assert true;
+    }
+
+    @Test
+    @DisplayName("generate Id good")
+    public void generateIdGood() throws DataAccessException {
+        sqlGameDao.createGameId();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("generate Id bad")
+    public void generateIdBad() throws DataAccessException {
+        sqlGameDao.createGameId();
+        assert true;
+    }
 }

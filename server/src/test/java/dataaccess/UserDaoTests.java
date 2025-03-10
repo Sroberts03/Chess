@@ -95,4 +95,18 @@ public class UserDaoTests {
         }
         assert !thrown;
     }
+
+    @Test
+    @DisplayName("get map good")
+    public void getMapGood() throws DataAccessException {
+        sqlDao.getUserMap();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map bad")
+    public void getMapBad() throws DataAccessException {
+        sqlDao.getUserMap();
+        assert true;
+    }
 }

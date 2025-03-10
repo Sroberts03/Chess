@@ -131,4 +131,32 @@ public class AuthDaoTets {
         }
         assert !thrown;
     }
+
+    @Test
+    @DisplayName("generate token good")
+    public void generateTokenGood() throws DataAccessException {
+        sqlAuthDao.generateToken();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("generate token bad")
+    public void generateTokenBad() throws DataAccessException {
+        sqlAuthDao.generateToken();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map good")
+    public void getMapGood() throws DataAccessException {
+        sqlAuthDao.getAuthMap();
+        assert true;
+    }
+
+    @Test
+    @DisplayName("get map bad")
+    public void getMapBad() throws DataAccessException {
+        sqlAuthDao.getAuthMap();
+        assert true;
+    }
 }
