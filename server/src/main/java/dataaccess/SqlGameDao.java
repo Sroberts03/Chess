@@ -86,7 +86,16 @@ public class SqlGameDao implements GameDao{
 
     @Override
     public void updateGame(GameData game) throws DataAccessException {
+        String sqlOne = "delete from gameData where gameId = ?";
 
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement query = conn.prepareStatement(sqlOne)) {
+            query.setInt(1,game.gameID());
+            query.executeUpdate();
+        } catch (SQLException e) {
+            throw new Error500(e.getMessage());
+        }
+        createGame(game);
     }
 
     @Override
