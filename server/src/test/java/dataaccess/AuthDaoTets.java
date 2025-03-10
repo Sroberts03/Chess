@@ -73,4 +73,37 @@ public class AuthDaoTets {
         }
         assert thrown;
     }
+
+    @Test
+    @DisplayName("remove auth good")
+    public void removeAuthGood() {
+        boolean thrown = false;
+        AuthData testAuth = null;
+        try {
+            sqlAuthDao.clearAuth();
+            testAuth = new AuthData(sqlAuthDao.generateToken(), "testUser");
+            sqlAuthDao.createAuth(testAuth);
+            sqlAuthDao.removeAuth(testAuth.authToken());
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
+
+    @Test
+    @DisplayName("remove auth bad")
+    public void removeAuthBad() {
+        boolean thrown = false;
+        AuthData testAuth = null;
+        try {
+            sqlAuthDao.clearAuth();
+            testAuth = new AuthData(sqlAuthDao.generateToken(), "testUser");
+            sqlAuthDao.createAuth(testAuth);
+            sqlAuthDao.createAuth(testAuth);
+            sqlAuthDao.removeAuth("fakeAuth");
+        } catch (DataAccessException e) {
+            thrown = true;
+        }
+        assert thrown;
+    }
 }

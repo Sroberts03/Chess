@@ -53,6 +53,15 @@ public class SqlAuthDao implements AuthDao{
 
     @Override
     public void removeAuth(String authToken) throws DataAccessException {
+        String sql = "delete from authData where authToken = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement query = conn.prepareStatement(sql)) {
+            query.setString(1, authToken);
+            query.executeUpdate();
+        } catch (SQLException e) {
+            throw new Error500(e.getMessage());
+        }
 
     }
 
