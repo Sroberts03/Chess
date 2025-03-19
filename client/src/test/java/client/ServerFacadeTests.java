@@ -5,6 +5,7 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 import models.JoinGame;
+import models.SignInData;
 import org.junit.jupiter.api.*;
 import server.Server;
 import models.GameName;
@@ -70,11 +71,12 @@ public class ServerFacadeTests {
         boolean thrown = false;
         AuthData auth = null;
         UserData user = new UserData("test", "testing321", "test@test.test");
+        SignInData signIn = new SignInData("test", "testing321");
         try {
             facade.clearApp();
             auth = facade.register(user);
             facade.logout(auth.authToken());
-            auth = facade.login(user);
+            auth = facade.login(signIn);
         } catch (ResponseException e) {
             thrown = true;
             System.out.print(e.getMessage());
@@ -87,10 +89,10 @@ public class ServerFacadeTests {
     @DisplayName("Login Negative")
     public void loginBad() throws Exception{
         boolean thrown = false;
-        UserData user = new UserData("test", "testing321", "test@test.test");
+        SignInData signIn = new SignInData("test", "testing321");
         try {
             facade.clearApp();
-            facade.login(user);
+            facade.login(signIn);
         } catch (ResponseException e) {
             thrown = true;
             System.out.print(e.getMessage());

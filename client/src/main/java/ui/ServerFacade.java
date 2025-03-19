@@ -7,6 +7,7 @@ import model.GameData;
 import model.UserData;
 import models.GameName;
 import models.JoinGame;
+import models.SignInData;
 
 import java.io.*;
 import java.net.*;
@@ -30,7 +31,7 @@ public class ServerFacade {
         return this.makeRequest("POST", path, user, AuthData.class, null);
     }
 
-    public AuthData login(UserData user) throws ResponseException {
+    public AuthData login(SignInData user) throws ResponseException {
         var path = "/session";
         return this.makeRequest("POST", path, user, AuthData.class, null);
     }

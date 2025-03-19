@@ -1,4 +1,4 @@
-package ui;
+package models;
 
 public record GameName(String gameName) {
 }

@@ -7,7 +7,7 @@ public class Repl {
     private final ui.ChessClient client;
 
     public Repl(String serverUrl) {
-        client = new ui.ChessClient(serverUrl, this);
+        client = new ui.ChessClient(serverUrl);
     }
 
     public void run() {
