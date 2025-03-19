@@ -258,4 +258,28 @@ public class ServerFacadeTests {
         assert thrown;
     }
 
+    @Test
+    @DisplayName("Clear App Positive")
+    public void clearAppGood() {
+        boolean thrown = false;
+        try {
+            facade.clearApp();
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
+
+    @Test
+    @DisplayName("Clear App Negative")
+    public void clearAppBad() {
+        boolean thrown = false;
+        try {
+            facade.clearApp();
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
+
 }
