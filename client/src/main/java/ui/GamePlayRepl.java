@@ -1,21 +1,28 @@
 package ui;
 
 import java.util.Scanner;
+
 import static ui.EscapeSequences.*;
 
-public class Repl {
-    private final ui.ChessClient client;
+public class GamePlayRepl {
 
-    public Repl(String serverUrl) {
-        client = new ui.ChessClient(serverUrl);
+    private String playerColor;
+    private GamePlayClient client;
+    private Integer gameID;
+
+    public GamePlayRepl(String playerColor, Integer gameID) {
+        this.playerColor = playerColor;
+        client = new GamePlayClient();
+        this.gameID = gameID;
     }
 
     public void run() {
-        System.out.println(" Welcome to Chess. Sign in to start.");
+        System.out.print("Welcome to game " + gameID + "\n");
         System.out.print(client.help());
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
+
         while (!result.equals("quit")) {
             printPrompt();
             String line = scanner.nextLine();
@@ -23,10 +30,6 @@ public class Repl {
             try {
                 result = client.eval(line);
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
-                if (client.getGameJoined() != 0) {
-                    GamePlayRepl gamePlay = new GamePlayRepl(client.getPlayerColor(), client.getGameJoined());
-                    gamePlay.run();
-                }
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);
@@ -38,6 +41,5 @@ public class Repl {
     private void printPrompt() {
         System.out.print("\n" + RESET_TEXT_COLOR + ">>> " + SET_TEXT_COLOR_GREEN);
     }
-
 
 }

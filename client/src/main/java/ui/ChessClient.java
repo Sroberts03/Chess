@@ -17,7 +17,7 @@ public class ChessClient {
     private final ServerFacade server;
     private final String serverUrl;
     private String authToken;
-    private Boolean gameJoined = false;
+    private Integer gameJoined = 0;
     private String playerColor = "";
 
 
@@ -27,7 +27,7 @@ public class ChessClient {
         authToken = null;
     }
 
-    public Boolean getGameJoined() {
+    public Integer getGameJoined() {
         return gameJoined;
     }
 
@@ -132,7 +132,7 @@ public class ChessClient {
         JoinGame joinGame = new JoinGame(params[0], Integer.valueOf(params[1]));
         try {
             server.joinGame(authToken, joinGame);
-            gameJoined = true;
+            gameJoined = joinGame.gameID();
             playerColor = joinGame.playerColor();
             return "You have joined Game " + params[1] + "\n";
         } catch (ResponseException e) {
