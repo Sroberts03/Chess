@@ -4,9 +4,10 @@ import errors.ResponseException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
+import models.JoinGame;
 import org.junit.jupiter.api.*;
 import server.Server;
-import ui.GameName;
+import models.GameName;
 import ui.ServerFacade;
 import java.util.ArrayList;
 
@@ -216,6 +217,43 @@ public class ServerFacadeTests {
         } catch (Exception e){
             thrown = true;
             System.out.print(e.getMessage());
+        }
+        assert thrown;
+    }
+
+    @Test
+    @DisplayName("Join Game Positive")
+    public void joinGameGood() {
+        boolean thrown = false;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        GameName gameName = new GameName("test");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            Integer gameID = facade.createGame(auth.authToken(), gameName);
+            JoinGame joinGame = new JoinGame("WHITE", gameID);
+            facade.joinGame(auth.authToken(), joinGame);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assert !thrown;
+    }
+
+    @Test
+    @DisplayName("Join Game Negative")
+    public void joinGameBad() {
+        boolean thrown = false;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        GameName gameName = new GameName("test");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            Integer gameID = facade.createGame(auth.authToken(), gameName);
+            JoinGame joinGame = new JoinGame("WHITE", gameID);
+            JoinGame joinGameFake = new JoinGame("BLACK", 123);
+            facade.joinGame(auth.authToken(), joinGameFake);
+        } catch (Exception e) {
+            thrown = true;
         }
         assert thrown;
     }

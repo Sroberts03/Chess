@@ -1,26 +1,23 @@
 package ui;
 
 import com.google.gson.Gson;
-import errors.ErrorResponse;
 import errors.ResponseException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
+import models.GameName;
+import models.JoinGame;
+
 import java.io.*;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 public class ServerFacade {
 
     private final String serverUrl;
-    private final HttpClient httpClient;
 
     public ServerFacade(String url) {
         serverUrl = url;
-        httpClient = HttpClient.newHttpClient();
     }
 
     public void clearApp() throws ResponseException {
@@ -53,6 +50,11 @@ public class ServerFacade {
         var path = "/game";
         record GameId(Integer gameID) {}
         return makeRequest("POST", path, gameName, GameId.class, authToken).gameID();
+    }
+
+    public void joinGame(String authToken, JoinGame game) throws ResponseException {
+        var path = "/game";
+        makeRequest("PUT", path, game, null, authToken);
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, String authToken) throws ResponseException {
