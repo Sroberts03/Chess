@@ -6,6 +6,7 @@ import errors.ResponseException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
+import models.GameName;
 import models.SignInData;
 import ui.ServerFacade;
 
@@ -25,15 +26,15 @@ public class ChessClient {
 
     public String eval(String input) {
         try {
-            var tokens = input.toUpperCase().split(" ");
+            var tokens = input.split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
+            return switch (cmd.toUpperCase()) {
                 case "S" -> signIn(params);
                 case "R" -> register(params);
                 case "L" -> listGames();
 //                case "J" -> joinGame(params);
-//                case "C" -> createGame(params);
+                case "C" -> createGame(params);
                 case "SO" -> signOut();
                 case "Q" -> "quit";
                 default -> help();
@@ -81,7 +82,23 @@ public class ChessClient {
     public String listGames() throws ResponseException {
         try {
             ArrayList<GameData> games = server.listGames(authToken);
-            return games.toString();
+            StringBuilder out = new StringBuilder();
+            for (GameData game : games) {
+                out.append(game.gameName()).append(" ").append("WHITE: ")
+                        .append(game.whiteUsername()).append(" ").append("BLACK: ")
+                        .append(game.blackUsername()).append("\n");
+            }
+            return out.toString();
+        } catch (ResponseException e) {
+            throw new ResponseException(e.StatusCode(), e.getMessage());
+        }
+    }
+
+    public String createGame(String... params) throws ResponseException {
+        GameName gameName = new GameName(params[0]);
+        try {
+            Integer gameID = server.createGame(authToken, gameName);
+            return "New game created: " + gameID + " " + gameName.gameName();
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }
