@@ -2,11 +2,13 @@ package client;
 
 import errors.ResponseException;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -127,7 +129,38 @@ public class ServerFacadeTests {
         assert thrown;
     }
 
+    @Test
+    @DisplayName("List Games Positive")
+    public void listGamesGood() {
+        boolean thrown = false;
+        ArrayList<GameData> games = null;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            games = facade.listGames(auth.authToken());
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert !thrown;
+        assert games != null;
+    }
 
-
+    @Test
+    @DisplayName("List Games Negative")
+    public void listGamesBad() {
+        boolean thrown = false;
+        ArrayList<GameData> games = null;
+        AuthData fakeAuth = new AuthData("fake", "fake");
+        try {
+            facade.clearApp();
+            games = facade.listGames(fakeAuth.authToken());
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert thrown;
+    }
 
 }

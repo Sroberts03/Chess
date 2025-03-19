@@ -1,15 +1,20 @@
 package ui;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import errors.ErrorResponse;
 import errors.ResponseException;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ServerFacade {
 
@@ -42,14 +47,30 @@ public class ServerFacade {
                 .DELETE()
                 .header("Authorization", authToken)
                 .build();
+        sendRequest(request);
+    }
 
+    public ArrayList<GameData> listGames(String authToken) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(serverUrl + "/game"))
+                .GET()
+                .header("Authorization", authToken)
+                .build();
+        record listGamesResponse(ArrayList<GameData> games) {
+        }
+        HttpResponse<String> response = sendRequest(request);
+        Gson gson = new Gson();
+        return gson.fromJson(response.body(), listGamesResponse.class).games();
+    }
+
+    private HttpResponse<String> sendRequest(HttpRequest request) throws Exception{
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
         if (!isSuccessful(response.statusCode())) {
             Gson gson = new Gson();
             ErrorResponse err = gson.fromJson(response.body(), ErrorResponse.class);
             throw new ResponseException(response.statusCode(), err.message());
         }
+        return response;
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
