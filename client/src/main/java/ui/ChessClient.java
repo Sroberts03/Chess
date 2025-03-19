@@ -7,6 +7,7 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 import models.GameName;
+import models.JoinGame;
 import models.SignInData;
 import ui.ServerFacade;
 
@@ -16,12 +17,17 @@ public class ChessClient {
     private final ServerFacade server;
     private final String serverUrl;
     private String authToken;
+    private Boolean gameJoined = false;
 
 
     public ChessClient(String Url) {
         this.serverUrl = Url;
         server = new ServerFacade(serverUrl);
         authToken = null;
+    }
+
+    public Boolean getGameJoined() {
+        return gameJoined;
     }
 
     public String eval(String input) {
@@ -33,7 +39,7 @@ public class ChessClient {
                 case "S" -> signIn(params);
                 case "R" -> register(params);
                 case "L" -> listGames();
-//                case "J" -> joinGame(params);
+                case "J" -> joinGame(params);
                 case "C" -> createGame(params);
                 case "SO" -> signOut();
                 case "Q" -> "quit";
@@ -45,6 +51,9 @@ public class ChessClient {
     }
 
     public String signIn(String... params) throws ResponseException {
+        if (params.length != 2) {
+            return "Bad Request, need both User Name and Password";
+        }
         SignInData signIn = new SignInData(params[0], params[1]);
         try {
             AuthData auth = server.login(signIn);
@@ -57,6 +66,9 @@ public class ChessClient {
     }
 
     public String register(String... params) throws ResponseException {
+        if (params.length != 3) {
+            return "Bad Request, need User Name, Password, and Email";
+        }
         UserData user = new UserData(params[0], params[1], params[2]);
         try {
             AuthData auth = server.register(user);
@@ -84,7 +96,8 @@ public class ChessClient {
             ArrayList<GameData> games = server.listGames(authToken);
             StringBuilder out = new StringBuilder();
             for (GameData game : games) {
-                out.append(game.gameName()).append(" ").append("WHITE: ")
+                out.append(game.gameID()).append(" ").append(game.gameName())
+                        .append(" ").append("WHITE: ")
                         .append(game.whiteUsername()).append(" ").append("BLACK: ")
                         .append(game.blackUsername()).append("\n");
             }
@@ -95,6 +108,9 @@ public class ChessClient {
     }
 
     public String createGame(String... params) throws ResponseException {
+        if (params.length != 1) {
+            return "Bad Request, need Game Name";
+        }
         GameName gameName = new GameName(params[0]);
         try {
             Integer gameID = server.createGame(authToken, gameName);
@@ -102,6 +118,24 @@ public class ChessClient {
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }
+    }
+
+    public String joinGame(String... params) throws ResponseException {
+        if (params.length != 2) {
+            return "Bad Request, need both Player Color and Game ID";
+        }
+        JoinGame joinGame = new JoinGame(params[0], Integer.valueOf(params[1]));
+        try {
+            server.joinGame(authToken, joinGame);
+            gameJoined = true;
+            return "You have joined Game " + params[1] + "\n";
+        } catch (ResponseException e) {
+            throw new ResponseException(e.StatusCode(), e.getMessage());
+        }
+    }
+
+    public void gameJoined() {
+        System.out.print("we in");
     }
 
     public String help() {
@@ -115,7 +149,7 @@ public class ChessClient {
         if (authToken != null) {
             return """
                     L -> List All Games
-                    J <Player Color>, <Game Name> -> Join Game
+                    J <Player Color>, <Game ID> -> Join Game
                     C <Game Name> -> Create Game
                     SO -> Sign Out
                     Q -> Quit

@@ -23,6 +23,9 @@ public class Repl {
             try {
                 result = client.eval(line);
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
+                if (client.getGameJoined()) {
+                    client.gameJoined();
+                }
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);
