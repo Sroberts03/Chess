@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.google.gson.Gson;
 import errors.ResponseException;
 import model.AuthData;
+import model.UserData;
 import models.SignInData;
 import ui.ServerFacade;
 
@@ -30,17 +31,16 @@ public class ChessClient {
             return switch (cmd) {
                 case "S" -> signIn(params);
                 case "R" -> register(params);
-                case "L" -> listGames(params);
-                case "J" -> joinGame(params);
-                case "C" -> createGame(params);
-                case "SO" -> signOut();
+//                case "L" -> listGames(params);
+//                case "J" -> joinGame(params);
+//                case "C" -> createGame(params);
+//                case "SO" -> signOut();
                 case "Q" -> "quit";
                 default -> help();
             };
         } catch (Exception e) {
             return e.getMessage();
         }
-        return null;
     }
 
     public String signIn(String... params) throws ResponseException {
@@ -48,7 +48,20 @@ public class ChessClient {
         try {
             AuthData auth = server.login(signIn);
             authToken = auth.authToken();
-            return "You are signed in as " + auth.username();
+            visitorName = auth.username();
+            return "You are signed in as " + visitorName;
+        } catch (ResponseException e) {
+            throw new ResponseException(e.StatusCode(), e.getMessage());
+        }
+    }
+
+    public String register(String... params) throws ResponseException {
+        UserData user = new UserData(params[0], params[1], params[2]);
+        try {
+            AuthData auth = server.register(user);
+            authToken = auth.authToken();
+            visitorName = auth.username();
+            return "You have registered and signed in as" + visitorName;
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }

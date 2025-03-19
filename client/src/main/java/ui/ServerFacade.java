@@ -36,12 +36,12 @@ public class ServerFacade {
         return this.makeRequest("POST", path, user, AuthData.class, null);
     }
 
-    public void logout(String authToken) throws Exception {
+    public void logout(String authToken) throws ResponseException {
         var path = "/session";
         makeRequest("DELETE", path, null, null, authToken);
     }
 
-    public ArrayList<GameData> listGames(String authToken) throws Exception {
+    public ArrayList<GameData> listGames(String authToken) throws ResponseException {
         var path = "/game";
         record ListGamesResponse(ArrayList<GameData> games) {}
         return makeRequest("GET", path, null, ListGamesResponse.class, authToken).games();
