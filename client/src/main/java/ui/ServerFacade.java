@@ -1,6 +1,7 @@
 package ui;
 
 import com.google.gson.Gson;
+import errors.ErrorResponse;
 import errors.ResponseException;
 import model.AuthData;
 import model.UserData;
@@ -45,7 +46,9 @@ public class ServerFacade {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (!isSuccessful(response.statusCode())) {
-            throw new ResponseException(response.statusCode(), response.body());
+            Gson gson = new Gson();
+            ErrorResponse err = gson.fromJson(response.body(), ErrorResponse.class);
+            throw new ResponseException(response.statusCode(), err.message());
         }
     }
 

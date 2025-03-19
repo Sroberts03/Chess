@@ -96,5 +96,38 @@ public class ServerFacadeTests {
         assert thrown;
     }
 
+    @Test
+    @DisplayName("Logout Positive")
+    public void logoutGood() {
+        boolean thrown = false;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            facade.logout(auth.authToken());
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert !thrown;
+    }
+
+    @Test
+    @DisplayName("Logout Negative")
+    public void logoutBad() {
+        boolean thrown = false;
+        AuthData fakeAuth = new AuthData("fake", "fake");
+        try {
+            facade.clearApp();
+            facade.logout(fakeAuth.authToken());
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert thrown;
+    }
+
+
+
 
 }
