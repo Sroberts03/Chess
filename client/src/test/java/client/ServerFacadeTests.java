@@ -6,10 +6,9 @@ import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import server.Server;
+import ui.GameName;
 import ui.ServerFacade;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class ServerFacadeTests {
@@ -161,6 +160,48 @@ public class ServerFacadeTests {
             System.out.print(e.getMessage());
         }
         assert thrown;
+    }
+
+    @Test
+    @DisplayName("Create Game Positive")
+    public void createGameGood() {
+        boolean thrown = false;
+        Integer gameID = null;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        GameName gameName = new GameName("test");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            gameID = facade.createGame(auth.authToken(), gameName);
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert !thrown;
+        assert gameID != null;
+    }
+
+    @Test
+    @DisplayName("Create Game Positive Two Games")
+    public void createGameGoodTwoGames() {
+        boolean thrown = false;
+        Integer gameID = null;
+        Integer gameID2 = null;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        GameName gameName = new GameName("test");
+        GameName gameName2 = new GameName("test2");
+        try {
+            facade.clearApp();
+            AuthData auth = facade.register(user);
+            gameID = facade.createGame(auth.authToken(), gameName);
+            gameID2 = facade.createGame(auth.authToken(), gameName2);
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert !thrown;
+        assert gameID == 1;
+        assert gameID2 == 2;
     }
 
 }
