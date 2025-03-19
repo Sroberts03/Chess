@@ -6,13 +6,18 @@ import model.AuthData;
 import model.UserData;
 import java.io.*;
 import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class ServerFacade {
 
     private final String serverUrl;
+    private final HttpClient httpClient;
 
     public ServerFacade(String url) {
         serverUrl = url;
+        httpClient = HttpClient.newHttpClient();
     }
 
     public void clearApp() throws ResponseException {
@@ -30,9 +35,18 @@ public class ServerFacade {
         return this.makeRequest("POST", path, user, AuthData.class);
     }
 
-    public void logout() throws ResponseException {
-        var path = "/session";
-        this.makeRequest("DELETE", path, null, null);
+    public void logout(String authToken) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(serverUrl + "/session"))
+                .DELETE()
+                .header("Authorization", authToken)
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (!isSuccessful(response.statusCode())) {
+            throw new ResponseException(response.statusCode(), response.body());
+        }
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
@@ -42,7 +56,7 @@ public class ServerFacade {
             http.setRequestMethod(method);
             http.setDoOutput(true);
 
-            writeBody(request, http);
+            writeRequest(request, http);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
@@ -53,8 +67,7 @@ public class ServerFacade {
         }
     }
 
-
-    private static void writeBody(Object request, HttpURLConnection http) throws IOException {
+    private static void writeRequest(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);

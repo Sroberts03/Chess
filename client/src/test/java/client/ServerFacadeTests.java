@@ -7,6 +7,8 @@ import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
 
+import java.util.Arrays;
+
 
 public class ServerFacadeTests {
 
@@ -23,14 +25,7 @@ public class ServerFacadeTests {
     }
 
     @AfterAll
-    static void stopServerAndClearApp() {
-        boolean thrown = false;
-        try {
-            facade.clearApp();
-        } catch (ResponseException e) {
-            thrown = true;
-        }
-        assert !thrown;
+    static void stopServer() {
         server.stop();
     }
 
@@ -41,9 +36,11 @@ public class ServerFacadeTests {
         AuthData auth = null;
         UserData user = new UserData("test", "testing321", "test@test.test");
         try {
+            facade.clearApp();
             auth = facade.register(user);
         } catch (ResponseException e) {
             thrown = true;
+            System.out.print(e.getMessage());
         }
         assert !thrown;
         assert auth != null;
@@ -56,11 +53,48 @@ public class ServerFacadeTests {
         AuthData auth = null;
         UserData user = new UserData("", "testing321", "test@test.test");
         try {
+            facade.clearApp();
             auth = facade.register(user);
         } catch (ResponseException e) {
             thrown = true;
+            System.out.print(e.getMessage());
         }
         assert thrown;
     }
+
+    @Test
+    @DisplayName("Login Positive")
+    public void loginGood() throws Exception{
+        boolean thrown = false;
+        AuthData auth = null;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        try {
+            facade.clearApp();
+            auth = facade.register(user);
+            facade.logout(auth.authToken());
+            auth = facade.login(user);
+        } catch (ResponseException e) {
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert !thrown;
+        assert auth != null;
+    }
+
+    @Test
+    @DisplayName("Login Negative")
+    public void loginBad() throws Exception{
+        boolean thrown = false;
+        UserData user = new UserData("test", "testing321", "test@test.test");
+        try {
+            facade.clearApp();
+            facade.login(user);
+        } catch (ResponseException e) {
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert thrown;
+    }
+
 
 }
