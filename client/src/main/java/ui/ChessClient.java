@@ -18,6 +18,7 @@ public class ChessClient {
     private final String serverUrl;
     private String authToken;
     private Boolean gameJoined = false;
+    private String playerColor = "";
 
 
     public ChessClient(String Url) {
@@ -28,6 +29,10 @@ public class ChessClient {
 
     public Boolean getGameJoined() {
         return gameJoined;
+    }
+
+    public String getPlayerColor() {
+        return playerColor;
     }
 
     public String eval(String input) {
@@ -42,7 +47,7 @@ public class ChessClient {
                 case "J" -> joinGame(params);
                 case "C" -> createGame(params);
                 case "SO" -> signOut();
-                case "Q" -> "quit";
+                case "Q" -> quit();
                 default -> help();
             };
         } catch (Exception e) {
@@ -128,14 +133,16 @@ public class ChessClient {
         try {
             server.joinGame(authToken, joinGame);
             gameJoined = true;
+            playerColor = joinGame.playerColor();
             return "You have joined Game " + params[1] + "\n";
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }
     }
 
-    public void gameJoined() {
-        System.out.print("we in");
+    public String quit() throws ResponseException {
+        this.signOut();
+        return "quit";
     }
 
     public String help() {
