@@ -34,7 +34,7 @@ public class ChessClient {
 //                case "L" -> listGames(params);
 //                case "J" -> joinGame(params);
 //                case "C" -> createGame(params);
-//                case "SO" -> signOut();
+                case "SO" -> signOut();
                 case "Q" -> "quit";
                 default -> help();
             };
@@ -61,7 +61,18 @@ public class ChessClient {
             AuthData auth = server.register(user);
             authToken = auth.authToken();
             visitorName = auth.username();
-            return "You have registered and signed in as" + visitorName;
+            return "You have registered and signed in as " + visitorName;
+        } catch (ResponseException e) {
+            throw new ResponseException(e.StatusCode(), e.getMessage());
+        }
+    }
+
+    public String signOut() throws ResponseException {
+        try {
+            server.logout(authToken);
+            authToken = null;
+            visitorName = null;
+            return "Goodbye! You are now signed out";
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }
