@@ -1,10 +1,10 @@
 package ui;
 
-import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.Arrays;
-import com.google.gson.Gson;
 import errors.ResponseException;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import models.SignInData;
 import ui.ServerFacade;
@@ -31,7 +31,7 @@ public class ChessClient {
             return switch (cmd) {
                 case "S" -> signIn(params);
                 case "R" -> register(params);
-//                case "L" -> listGames(params);
+                case "L" -> listGames();
 //                case "J" -> joinGame(params);
 //                case "C" -> createGame(params);
                 case "SO" -> signOut();
@@ -73,6 +73,15 @@ public class ChessClient {
             authToken = null;
             visitorName = null;
             return "Goodbye! You are now signed out";
+        } catch (ResponseException e) {
+            throw new ResponseException(e.StatusCode(), e.getMessage());
+        }
+    }
+
+    public String listGames() throws ResponseException {
+        try {
+            ArrayList<GameData> games = server.listGames(authToken);
+            return games.toString();
         } catch (ResponseException e) {
             throw new ResponseException(e.StatusCode(), e.getMessage());
         }
