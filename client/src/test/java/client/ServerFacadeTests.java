@@ -204,4 +204,20 @@ public class ServerFacadeTests {
         assert gameID2 == 2;
     }
 
+    @Test
+    @DisplayName("Create Game Negative")
+    public void createGameBad() {
+        boolean thrown = false;
+        AuthData fakeAuth = new AuthData("fake", "fake");
+        GameName gameName = new GameName("test");
+        try {
+            facade.clearApp();
+            facade.createGame(fakeAuth.authToken(), gameName);
+        } catch (Exception e){
+            thrown = true;
+            System.out.print(e.getMessage());
+        }
+        assert thrown;
+    }
+
 }
