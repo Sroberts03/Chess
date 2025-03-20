@@ -61,7 +61,7 @@ public class ChessClient {
 
     public String signIn(String... params) throws ResponseException {
         if (params.length != 2) {
-            return "Bad Request, need both User Name and Password";
+            return "Bad Request, need User Name and Password";
         }
         SignInData signIn = new SignInData(params[0], params[1]);
         try {
@@ -129,9 +129,21 @@ public class ChessClient {
         }
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     public String joinGame(String... params) throws ResponseException {
         if (params.length != 2) {
-            return "Bad Request, need both Player Color and Game ID";
+            return "Bad Request, need Player Color and Game ID";
+        }
+        if (!isNumeric(params[1])){
+            return "Bad Request, order: J <Desired color> <game ID>";
         }
         JoinGame joinGame = new JoinGame(params[0], Integer.valueOf(params[1]));
         try {
