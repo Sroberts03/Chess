@@ -145,7 +145,9 @@ public class ChessClient {
     }
 
     public String quit() throws ResponseException {
-        this.signOut();
+        if (authToken != null) {
+            this.signOut();
+        }
         return "quit";
     }
 
