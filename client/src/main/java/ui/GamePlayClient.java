@@ -39,17 +39,7 @@ public class GamePlayClient {
     }
 
     private void whiteBoard() {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " a ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " h ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(RESET_BG_COLOR + "\n");
+        whiteStartandEndBoard();
         System.out.print(SET_BG_COLOR_LIGHT_GREY + " 8 ");
         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " R ");
         System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
@@ -138,31 +128,11 @@ public class GamePlayClient {
         System.out.print(SET_BG_COLOR_WHITE + " R ");
         System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 1 ");
         System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " a ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " h ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(RESET_BG_COLOR + "\n");
+        whiteStartandEndBoard();
     }
 
     private void blackBoard() {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " h ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " a ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(RESET_BG_COLOR + "\n");
+        blackStartAndEndBoard();
         System.out.print(SET_BG_COLOR_LIGHT_GREY + " 1 ");
         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " R ");
         System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
@@ -251,6 +221,24 @@ public class GamePlayClient {
         System.out.print(SET_BG_COLOR_WHITE + " R ");
         System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 8 ");
         System.out.print(RESET_BG_COLOR + "\n");
+        blackStartAndEndBoard();
+    }
+
+    private void whiteStartandEndBoard() {
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " a ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + " h ");
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
+        System.out.print(RESET_BG_COLOR + "\n");
+    }
+
+    private void blackStartAndEndBoard() {
         System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
         System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " h ");
         System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
