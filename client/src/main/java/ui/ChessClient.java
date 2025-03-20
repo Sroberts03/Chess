@@ -21,8 +21,8 @@ public class ChessClient {
     private String playerColor = "";
 
 
-    public ChessClient(String Url) {
-        this.serverUrl = Url;
+    public ChessClient(String url) {
+        this.serverUrl = url;
         server = new ServerFacade(serverUrl);
         authToken = null;
     }
@@ -70,7 +70,7 @@ public class ChessClient {
             visitorName = auth.username();
             return "You are signed in as " + visitorName;
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class ChessClient {
             visitorName = auth.username();
             return "You have registered and signed in as " + visitorName;
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
@@ -96,7 +96,7 @@ public class ChessClient {
             visitorName = null;
             return "Goodbye! You are now signed out";
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ public class ChessClient {
             }
             return out.toString();
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
@@ -125,7 +125,7 @@ public class ChessClient {
             Integer gameID = server.createGame(authToken, gameName);
             return "New game created: " + gameID + " " + gameName.gameName();
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ public class ChessClient {
             playerColor = joinGame.playerColor();
             return "You have joined Game " + params[1] + "\n";
         } catch (ResponseException e) {
-            throw new ResponseException(e.StatusCode(), e.getMessage());
+            throw new ResponseException(e.statusCode(), e.getMessage());
         }
     }
 
