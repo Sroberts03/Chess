@@ -28,6 +28,11 @@ public class Repl {
                     gamePlay.run();
                     client.setGameJoined();
                 }
+                if (client.getObservingGame() != 0) {
+                    Observer obs = new Observer(client.getObservingGame());
+                    obs.run();
+                    client.resetObservingGame();
+                }
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

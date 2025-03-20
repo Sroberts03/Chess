@@ -19,12 +19,21 @@ public class ChessClient {
     private String authToken;
     private Integer gameJoined = 0;
     private String playerColor = "";
+    private Integer observingGame = 0;
 
 
     public ChessClient(String url) {
         this.serverUrl = url;
         server = new ServerFacade(serverUrl);
         authToken = null;
+    }
+
+    public void resetObservingGame() {
+        observingGame = 0;
+    }
+
+    public Integer getObservingGame() {
+        return observingGame;
     }
 
     public void setGameJoined() {
@@ -50,6 +59,7 @@ public class ChessClient {
                 case "L" -> listGames();
                 case "J" -> joinGame(params);
                 case "C" -> createGame(params);
+                case "O" -> observeGame(params);
                 case "SO" -> signOut();
                 case "Q" -> quit();
                 default -> help();
@@ -156,6 +166,17 @@ public class ChessClient {
         }
     }
 
+    public String observeGame(String... params) {
+        if (params.length != 1) {
+            return "Bad Request, need Game ID";
+        }
+        if (!isNumeric(params[0])){
+            return "Bad Request, order: O <game ID>";
+        }
+        observingGame = Integer.valueOf(params[0]);
+        return "Observing Game " + observingGame + "\n";
+    }
+
     public String quit() throws ResponseException {
         if (authToken != null) {
             this.signOut();
@@ -166,6 +187,7 @@ public class ChessClient {
     public String help() {
         if (authToken == null) {
             return """
+                    Press any key for Help
                     S <User Name>, <Password> -> Sign In
                     R <User Name>, <Password>, <Email> -> Register
                     Q -> Quit
@@ -173,9 +195,11 @@ public class ChessClient {
         }
         if (authToken != null) {
             return """
+                    Press any key for Help
                     L -> List All Games
                     J <Player Color>, <Game ID> -> Join Game
                     C <Game Name> -> Create Game
+                    O <Game ID> -> Observe Game
                     SO -> Sign Out
                     Q -> Quit
                     """;
