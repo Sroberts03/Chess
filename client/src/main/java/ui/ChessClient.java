@@ -27,6 +27,10 @@ public class ChessClient {
         authToken = null;
     }
 
+    public void setGameJoined() {
+        gameJoined = 0;
+    }
+
     public Integer getGameJoined() {
         return gameJoined;
     }

@@ -6,9 +6,9 @@ import static ui.EscapeSequences.*;
 
 public class GamePlayRepl {
 
-    private String playerColor;
-    private GamePlayClient client;
-    private Integer gameID;
+    private final String playerColor;
+    private final GamePlayClient client;
+    private final Integer gameID;
 
     public GamePlayRepl(String playerColor, Integer gameID) {
         this.playerColor = playerColor;
@@ -24,6 +24,7 @@ public class GamePlayRepl {
         var result = "";
 
         while (!result.equals("quit")) {
+            client.printBoard(playerColor);
             printPrompt();
             String line = scanner.nextLine();
 

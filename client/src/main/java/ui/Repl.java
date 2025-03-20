@@ -26,6 +26,7 @@ public class Repl {
                 if (client.getGameJoined() != 0) {
                     GamePlayRepl gamePlay = new GamePlayRepl(client.getPlayerColor(), client.getGameJoined());
                     gamePlay.run();
+                    client.setGameJoined();
                 }
             } catch (Throwable e) {
                 var msg = e.toString();
