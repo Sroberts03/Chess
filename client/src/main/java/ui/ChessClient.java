@@ -149,11 +149,20 @@ public class ChessClient {
     }
 
     public String joinGame(String... params) throws ResponseException {
+        int numGames = 0;
         if (params.length != 2) {
             return "Bad Request, need Player Color and Game ID";
         }
         if (!isNumeric(params[1])){
             return "Bad Request, order: J <Desired color> <game ID>";
+        }
+        try {
+            numGames = server.listGames(authToken).size();
+        } catch (ResponseException e) {
+            throw new ResponseException(e.statusCode(), e.getMessage());
+        }
+        if (Integer.parseInt(params[1]) > numGames) {
+            return "Game ID " + params[1] + " doesn't exist. Please Enter valid game ID";
         }
         JoinGame joinGame = new JoinGame(params[0], Integer.valueOf(params[1]));
         try {
@@ -166,14 +175,24 @@ public class ChessClient {
         }
     }
 
-    public String observeGame(String... params) {
+    public String observeGame(String... params) throws ResponseException {
+        int numGames = 0;
         if (params.length != 1) {
             return "Bad Request, need Game ID";
         }
         if (!isNumeric(params[0])){
             return "Bad Request, order: O <game ID>";
         }
+        try {
+            numGames = server.listGames(authToken).size();
+        } catch (ResponseException e) {
+            throw new ResponseException(e.statusCode(), e.getMessage());
+        }
         observingGame = Integer.valueOf(params[0]);
+        if (observingGame > numGames) {
+            observingGame = 0;
+            return "Game ID " + params[0] + " doesn't exist. Please Enter valid game ID";
+        }
         return "Observing Game " + observingGame + "\n";
     }
 
