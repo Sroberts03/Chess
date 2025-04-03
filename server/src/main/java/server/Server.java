@@ -16,7 +16,8 @@ public class Server {
             authDao = new SqlAuthDao();
             userDao = new SqlUserDao();
             gameDao = new SqlGameDao();
-            webSocketHandler = new WebSocketHandler(authDao,gameDao,userDao);
+            webSocketHandler = new WebSocketHandler();
+            webSocketHandler.webSocketSetter(authDao,gameDao,userDao);
         } catch (DataAccessException e) {
             throw new RuntimeException();
         }
@@ -29,9 +30,6 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
         createRoutes();
-
-        //This line initializes the server and can be removed once you have a functioning endpoint 
-        Spark.init();
 
         Spark.awaitInitialization();
         return Spark.port();
