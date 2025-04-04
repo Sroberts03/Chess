@@ -14,11 +14,21 @@ public class ChessGame {
 
     public ChessBoard chessBoard;
     public TeamColor chessTurn;
+    private boolean gameOver;
 
     public ChessGame() {
         chessBoard = new ChessBoard();
         chessBoard.resetBoard();
         chessTurn = TeamColor.WHITE;
+        gameOver = false;
+    }
+
+    public boolean getGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean condition) {
+        gameOver = condition;
     }
 
     /**

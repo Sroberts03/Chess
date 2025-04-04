@@ -92,6 +92,9 @@ public class WebSocketHandler {
             ChessMove move = command.getMove();
             GameData oldGameData = gameDao.getGame(command.getGameID());
             ChessGame game = oldGameData.game();
+            if (game.getGameOver()) {
+                throw new InvalidMoveException("This game is over already");
+            }
             if (!(oldGameData.blackUsername() == null) &&
                     oldGameData.blackUsername().equals(username)){
                 playerColor = ChessGame.TeamColor.BLACK;
@@ -124,6 +127,12 @@ public class WebSocketHandler {
                     username + "made move: " + move);
             broadcastNotificationMessage(command.getGameID(), notifyMoveMade, session);
             if (game.isInCheckmate(game.getTeamTurn())) {
+                GameData oldGameDataCheckMate = gameDao.getGame(command.getGameID());
+                ChessGame gameCheckMate = oldGameDataCheckMate.game();
+                game.setGameOver(true);
+                GameData newGameDataCheckMate = new GameData(oldGameDataCheckMate.gameID(), oldGameDataCheckMate.whiteUsername(),
+                        oldGameDataCheckMate.blackUsername(), oldGameData.gameName(), gameCheckMate);
+                gameDao.updateGame(newGameDataCheckMate);
                 NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
                         game.getTeamTurn().name() + "is in checkmate. Game Over");
                 broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
@@ -136,6 +145,12 @@ public class WebSocketHandler {
                 sendNotificationMessage(inCheckmate,session);
             }
             else if (game.isInStalemate(game.getTeamTurn())) {
+                GameData oldGameDataStaleMate = gameDao.getGame(command.getGameID());
+                ChessGame gameCheckMate = oldGameDataStaleMate.game();
+                game.setGameOver(true);
+                GameData newGameDataCheckMate = new GameData(oldGameDataStaleMate.gameID(), oldGameDataStaleMate.whiteUsername(),
+                        oldGameDataStaleMate.blackUsername(), oldGameData.gameName(), gameCheckMate);
+                gameDao.updateGame(newGameDataCheckMate);
                 NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
                         game.getTeamTurn().name() + "is in stalemate. Game over.");
                 broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
@@ -171,7 +186,41 @@ public class WebSocketHandler {
         }
     }
 
-    public void resign(UserGameCommand command, Session session) {
+    public void resign(UserGameCommand command, Session session) throws IOException {
+        try {
+            boolean observer = false;
+            String winningColor = "";
+            String username = authDao.getAuth(command.getAuthToken()).username();
+            GameData oldGameData = gameDao.getGame(command.getGameID());
+            ChessGame gameOver = oldGameData.game();
+            if (gameOver.getGameOver()) {
+                throw new InvalidMoveException("This game is already over. You can't resign");
+            }
+            gameOver.setGameOver(true);
+            if (!(oldGameData.blackUsername() == null) &&
+                    oldGameData.blackUsername().equals(username)){
+                winningColor = "White";
+            }
+            else if (!(oldGameData.whiteUsername() == null) &&
+                    oldGameData.whiteUsername().equals(username)) {
+                winningColor = "Black";
+            }
+            else {
+                observer = true;
+            }
+            if (observer) {
+                throw new InvalidMoveException("Silly you can't resign, you're just watching.");
+            }
+            GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(),
+                    oldGameData.blackUsername(), oldGameData.gameName(), gameOver);
+            gameDao.updateGame(newGameData);
+            NotificationMessage notify = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                    username + " has resigned. Game over! " + winningColor + " wins!!");
+            sendNotificationMessage(notify, session);
+            broadcastNotificationMessage(command.getGameID(), notify, session);
+        } catch (Exception ex) {
+            onError(ex, session);
+        }
     }
 
     public void sendErrorMessage(ErrorMessage message, Session session) throws IOException {
