@@ -115,10 +115,10 @@ public class ChessGame {
             throw new InvalidMoveException();
         }
         if (!legalMoves.contains(move)) {
-            throw new InvalidMoveException();
+            throw new InvalidMoveException("Invalid move");
         }
         if (getTeamTurn() != piece.getTeamColor()) {
-            throw new InvalidMoveException();
+            throw new InvalidMoveException("Not your turn");
         }
         chessBoard.addPiece(move.getStartPosition(), null);
         if (move.getPromotionPiece() != null) {

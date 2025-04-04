@@ -1,6 +1,6 @@
 package websocket;
 
-import chess.ChessGame;
+import chess.*;
 import com.google.gson.Gson;
 import dataaccess.AuthDao;
 import dataaccess.GameDao;
@@ -38,12 +38,16 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
-        UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
-        switch (command.getCommandType()) {
-            case CONNECT -> connect(command, session);
-            case MAKE_MOVE -> makeMove((MakeMoveCommand) command, session);
-            case LEAVE -> leave(command, session);
-            case RESIGN -> resign(command, session);
+        if (message.contains("move")) {
+            MakeMoveCommand command = new Gson().fromJson(message, MakeMoveCommand.class);
+            makeMove(command, session);
+        } else {
+            UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
+            switch (command.getCommandType()) {
+                case CONNECT -> connect(command, session);
+                case LEAVE -> leave(command, session);
+                case RESIGN -> resign(command, session);
+            }
         }
     }
 
@@ -80,6 +84,65 @@ public class WebSocketHandler {
     }
 
     public void makeMove(MakeMoveCommand command, Session session) throws IOException {
+        try {
+            ChessGame.TeamColor playerColor = ChessGame.TeamColor.WHITE;
+            boolean observer = false;
+            String username = authDao.getAuth(command.getAuthToken()).username();
+            ChessMove move = command.getMove();
+            GameData oldGameData = gameDao.getGame(command.getGameID());
+            ChessGame game = oldGameData.game();
+            if (!(oldGameData.blackUsername() == null) &&
+                    oldGameData.blackUsername().equals(username)){
+                playerColor = ChessGame.TeamColor.BLACK;
+            }
+            else if (!(oldGameData.whiteUsername() == null) &&
+                    oldGameData.whiteUsername().equals(username)) {
+                playerColor = ChessGame.TeamColor.WHITE;
+            }
+            else {
+                observer = true;
+            }
+            if (observer) {
+                throw new InvalidMoveException("Silly you can't move pieces, you're just watching.");
+            }
+            int startRow = move.getStartPosition().getRow();
+            int startColumn = move.getStartPosition().getColumn();
+            ChessPiece movingPiece = game.chessBoard.getPiece(new ChessPosition(startRow, startColumn));
+            System.out.print(movingPiece.getTeamColor());
+            if (!movingPiece.getTeamColor().equals(playerColor)) {
+                throw new InvalidMoveException("You can't move your opponents piece");
+            }
+            game.makeMove(move);
+            GameData newGameData = new GameData(oldGameData.gameID(),oldGameData.whiteUsername(),oldGameData.blackUsername(),
+                    oldGameData.gameName(), game);
+            gameDao.updateGame(newGameData);
+            LoadGameMessage message = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, game);
+            sendLoadGameMessage(message, session);
+            broadcastLoadGameMessage(command.getGameID(), message, session);
+            NotificationMessage notifyMoveMade = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                    username + "made move: " + move);
+            broadcastNotificationMessage(command.getGameID(), notifyMoveMade, session);
+            if (game.isInCheckmate(game.getTeamTurn())) {
+                NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                        game.getTeamTurn().name() + "is in checkmate. Game Over");
+                broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
+                sendNotificationMessage(inCheckmate,session);
+            }
+            else if (game.isInCheck(game.getTeamTurn())) {
+                NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                        game.getTeamTurn().name() + "is in check.");
+                broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
+                sendNotificationMessage(inCheckmate,session);
+            }
+            else if (game.isInStalemate(game.getTeamTurn())) {
+                NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                        game.getTeamTurn().name() + "is in stalemate. Game over.");
+                broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
+                sendNotificationMessage(inCheckmate,session);
+            }
+        } catch (Exception ex) {
+            onError(ex, session);
+        }
     }
 
     public void leave(UserGameCommand command, Session session) {
@@ -107,6 +170,11 @@ public class WebSocketHandler {
                 }
             }
         }
+    }
+
+    public void sendNotificationMessage(NotificationMessage message, Session session) throws IOException {
+        String gameJson = new Gson().toJson(message);
+        session.getRemote().sendString(gameJson);
     }
 
     public void broadcastNotificationMessage(Integer gameID, NotificationMessage message, Session notThisSession) throws IOException {
