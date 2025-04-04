@@ -1,12 +1,29 @@
 package ui;
 
-import static ui.EscapeSequences.*;
+import chess.ChessGame;
+import errors.ResponseException;
+import websocket.WebsocketFacade;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
+
 import java.util.Arrays;
 
-public class GamePlayClient {
+public class GamePlayClient implements GameHandler{
 
-    public GamePlayClient() {
+    private ChessGame game;
+    private WebsocketFacade ws;
+    private final String serverUrl;
+    private final String playerColor;
+    private final String authToken;
+    private final Integer gameID;
 
+    public GamePlayClient(String serverUrl, String playerColor,
+                          String authToken, Integer gameID) {
+        this.serverUrl = serverUrl;
+        this.playerColor = playerColor;
+        this.authToken = authToken;
+        this.gameID = gameID;
     }
 
     public String eval(String input) {
@@ -15,9 +32,11 @@ public class GamePlayClient {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd.toUpperCase()) {
+                case "RD" -> redraw();
                 case "L" -> leave();
-//                case "M" -> makeMove(params);
-//                case "H" -> highlight(params);
+                case "M" -> makeMove(params);
+                case "R" -> resign();
+                case "H" -> highlight(params);
                 default -> help();
             };
         } catch (Exception e) {
@@ -25,11 +44,35 @@ public class GamePlayClient {
         }
     }
 
-    public String leave() {
+    public void connect() throws ResponseException {
+        ws = new WebsocketFacade(serverUrl, authToken, gameID, this);
+        ws.connect();
+    }
+
+    public String redraw() {
+        printBoard();
+        return "redrawn";
+    }
+
+    public String leave() throws ResponseException {
+        ws.leave();
         return "quit";
     }
 
-    public void printBoard(String playerColor) {
+    public String makeMove(String... params) {
+
+    }
+
+    public String resign() throws ResponseException {
+        ws.resign();
+        return "resigned";
+    }
+
+    public String highlight(String... params) {
+
+    }
+
+    public void printBoard() {
         if (playerColor.equalsIgnoreCase("WHITE")) {
             whiteBoard();
         }
@@ -39,225 +82,39 @@ public class GamePlayClient {
     }
 
     private void whiteBoard() {
-        whiteStartandEndBoard();
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 8 ");
-        System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " R ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
-        System.out.print(SET_BG_COLOR_WHITE + " B ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " Q ");
-        System.out.print(SET_BG_COLOR_WHITE + " K ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " B ");
-        System.out.print(SET_BG_COLOR_WHITE + " N ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " R ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 8 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 7 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_RED + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 7 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 6 ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 6 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 5 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 5 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 4 ");
-        System.out.print(SET_BG_COLOR_WHITE +  "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 4 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 3 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY +  "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 3 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 2 ");
-        System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 2 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 1 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_BLUE + " R ");
-        System.out.print(SET_BG_COLOR_WHITE + " N ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " B ");
-        System.out.print(SET_BG_COLOR_WHITE + " Q ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " K ");
-        System.out.print(SET_BG_COLOR_WHITE + " B ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
-        System.out.print(SET_BG_COLOR_WHITE + " R ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 1 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        whiteStartandEndBoard();
+
     }
 
     private void blackBoard() {
-        blackStartAndEndBoard();
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 1 ");
-        System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " R ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
-        System.out.print(SET_BG_COLOR_WHITE + " B ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " K ");
-        System.out.print(SET_BG_COLOR_WHITE + " Q ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " B ");
-        System.out.print(SET_BG_COLOR_WHITE + " N ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " R ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 1 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 2 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_BLUE + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 2 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 3 ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 3 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 4 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 4 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 5 ");
-        System.out.print(SET_BG_COLOR_WHITE +  "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 5 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 6 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY +  "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + "   ");
-        System.out.print(SET_BG_COLOR_WHITE + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 6 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 7 ");
-        System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_WHITE + " P ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " P ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 7 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " 8 ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_RED + " R ");
-        System.out.print(SET_BG_COLOR_WHITE + " N ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " B ");
-        System.out.print(SET_BG_COLOR_WHITE + " K ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " Q ");
-        System.out.print(SET_BG_COLOR_WHITE + " B ");
-        System.out.print(SET_BG_COLOR_DARK_GREY + " N ");
-        System.out.print(SET_BG_COLOR_WHITE + " R ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + SET_TEXT_COLOR_BLACK + " 8 ");
-        System.out.print(RESET_BG_COLOR + "\n");
-        blackStartAndEndBoard();
-    }
 
-    private void whiteStartandEndBoard() {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " a ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " h ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(RESET_BG_COLOR + "\n");
     }
-
-    private void blackStartAndEndBoard() {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " h ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " g ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " f ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " e ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " d ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " c ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " b ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + " a ");
-        System.out.print(SET_BG_COLOR_LIGHT_GREY + "   ");
-        System.out.print(RESET_BG_COLOR + "\n");
-    }
-
 
     public String help() {
         return """
+                press any key for help menu
                 L -> leave game
+                RD -> Redraw Board
                 M <Column> <Row> -> make move to column and row
+                R -> Resign game
                 H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
                 """;
+    }
+
+    @Override
+    public void onLoadGame(LoadGameMessage message) {
+        game = message.getGame();
+        printBoard();
+    }
+
+    @Override
+    public void onError(ErrorMessage message) {
+        String mes = message.getErrorMessage();
+        System.out.print(mes);
+    }
+
+    @Override
+    public void onNotifiy(NotificationMessage message) {
+        String mes = message.getMessage();
+        System.out.print(mes);
     }
 }

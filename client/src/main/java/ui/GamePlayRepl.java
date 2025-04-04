@@ -1,5 +1,7 @@
 package ui;
 
+import errors.ResponseException;
+
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -9,14 +11,19 @@ public class GamePlayRepl {
     private final String playerColor;
     private final GamePlayClient client;
     private final Integer gameID;
+    private final String authToken;
+    private final String url;
 
-    public GamePlayRepl(String playerColor, Integer gameID) {
+    public GamePlayRepl(String playerColor, Integer gameID, String authToken, String url) {
         this.playerColor = playerColor;
-        client = new GamePlayClient();
         this.gameID = gameID;
+        this.authToken = authToken;
+        this.url = url;
+        client = new GamePlayClient(url, authToken, playerColor, gameID);
     }
 
-    public void run() {
+    public void run() throws ResponseException {
+        client.connect();
         System.out.print("Welcome to game " + gameID + "\n");
         System.out.print(client.help());
 
@@ -24,13 +31,12 @@ public class GamePlayRepl {
         var result = "";
 
         while (!result.equals("quit")) {
-            client.printBoard(playerColor);
+            client.printBoard();
             printPrompt();
             String line = scanner.nextLine();
 
             try {
                 result = client.eval(line);
-                System.out.print(SET_TEXT_COLOR_BLUE + result);
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

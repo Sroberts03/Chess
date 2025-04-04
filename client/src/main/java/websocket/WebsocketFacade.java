@@ -1,9 +1,12 @@
 package websocket;
 
 
+import chess.ChessGame;
 import chess.ChessMove;
 import com.google.gson.Gson;
 import errors.ResponseException;
+import ui.GameHandler;
+import ui.GamePlayClient;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
@@ -17,20 +20,36 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.PreparedStatement;
 
-public class WebsocketFacade extends Endpoint {
+public class WebsocketFacade extends Endpoint implements MessageHandler {
 
     public Session session;
-    NotificationHandler notificationHandler;
-    String authToken;
-    Integer gameID;
+    public GamePlayClient gamePlayClient;
+    public String authToken;
+    public Integer gameID;
+    public GameHandler gameHandler = new GameHandler() {
+        @Override
+        public void onLoadGame(LoadGameMessage message) {
+            gamePlayClient.onLoadGame(message);
+        }
 
-    public WebsocketFacade(String url, NotificationHandler notificationHandler, String authToken, Integer gameID) throws ResponseException {
+        @Override
+        public void onError(ErrorMessage message) {
+            gamePlayClient.onError(message);
+        }
+
+        @Override
+        public void onNotifiy(NotificationMessage message) {
+            gamePlayClient.onNotifiy(message);
+        }
+    };
+
+    public WebsocketFacade(String url, String authToken, Integer gameID, GamePlayClient gamePlayClient) throws ResponseException {
         try {
+            this.gamePlayClient = gamePlayClient;
             this.authToken = authToken;
             this.gameID = gameID;
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/ws");
-            this.notificationHandler = notificationHandler;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
@@ -40,15 +59,15 @@ public class WebsocketFacade extends Endpoint {
                 public void onMessage(String message) {
                     if (message.contains("ERROR")) {
                         ErrorMessage notification = new Gson().fromJson(message, ErrorMessage.class);
-                        notificationHandler.notifyError(notification);
+                        gameHandler.onError(notification);
                     }
                     else if (message.contains("LOAD_GAME")) {
                         LoadGameMessage notification = new Gson().fromJson(message, LoadGameMessage.class);
-                        notificationHandler.notifyLoadGame(notification);
+                        gameHandler.onLoadGame(notification);
                     }
                     else if (message.contains("NOTIFICATION")) {
                         NotificationMessage notification = new Gson().fromJson(message, NotificationMessage.class);
-                        notificationHandler.notifyNotification(notification);
+                        gameHandler.onNotifiy(notification);
                     }
                 }
             });
