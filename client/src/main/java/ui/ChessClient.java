@@ -9,7 +9,6 @@ import model.UserData;
 import models.GameName;
 import models.JoinGame;
 import models.SignInData;
-import ui.ServerFacade;
 
 
 public class ChessClient {
@@ -26,6 +25,14 @@ public class ChessClient {
         this.serverUrl = url;
         server = new ServerFacade(serverUrl);
         authToken = null;
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public String getAuthToken() {
+        return authToken;
     }
 
     public void resetObservingGame() {

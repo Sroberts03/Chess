@@ -1,6 +1,8 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import errors.ResponseException;
 import websocket.WebsocketFacade;
 import websocket.messages.ErrorMessage;
@@ -59,8 +61,16 @@ public class GamePlayClient implements GameHandler{
         return "quit";
     }
 
-    public String makeMove(String... params) {
-
+    public String makeMove(String... params) throws ResponseException {
+        int startCol = Integer.parseInt(params[0]);
+        int startRow = Integer.parseInt(params[1]);
+        int endCol = Integer.parseInt(params[2]);
+        int endRow = Integer.parseInt(params[3]);
+        ChessPosition start = new ChessPosition(startRow,startCol);
+        ChessPosition end = new ChessPosition(endRow,endCol);
+        ChessMove move = new ChessMove(start,end,null);
+        ws.makeMove(move);
+        return "move made";
     }
 
     public String resign() throws ResponseException {
@@ -69,7 +79,7 @@ public class GamePlayClient implements GameHandler{
     }
 
     public String highlight(String... params) {
-
+        return "highlight";
     }
 
     public void printBoard() {
@@ -82,22 +92,23 @@ public class GamePlayClient implements GameHandler{
     }
 
     private void whiteBoard() {
-
+        System.out.print(game.getBoard().toString());
     }
 
     private void blackBoard() {
-
+        System.out.print(game.getBoard().toString());
     }
 
     public String help() {
-        return """
+        System.out.print("""
                 press any key for help menu
                 L -> leave game
                 RD -> Redraw Board
-                M <Column> <Row> -> make move to column and row
+                M <Start Column> <Start Row> <End Column> <End Row> -> make move to column and row
                 R -> Resign game
                 H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
-                """;
+                """);
+        return "help";
     }
 
     @Override

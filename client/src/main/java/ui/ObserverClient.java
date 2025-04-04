@@ -9,7 +9,7 @@ public class ObserverClient {
     GamePlayClient boardPrinter;
 
     public ObserverClient() {
-        boardPrinter = new GamePlayClient();
+//        boardPrinter = new GamePlayClient();
     }
 
     public String eval(String input) {
@@ -31,7 +31,7 @@ public class ObserverClient {
     }
 
     public void printBoard() {
-        boardPrinter.printBoard("White");
+        System.out.print("hello");
     }
 
     public String help() {

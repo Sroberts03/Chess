@@ -24,7 +24,8 @@ public class Repl {
                 result = client.eval(line);
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
                 if (client.getGameJoined() != 0) {
-                    GamePlayRepl gamePlay = new GamePlayRepl(client.getPlayerColor(), client.getGameJoined());
+                    GamePlayRepl gamePlay = new GamePlayRepl(client.getPlayerColor(), client.getGameJoined(),
+                            client.getAuthToken(), client.getServerUrl());
                     gamePlay.run();
                     client.setGameJoined();
                 }

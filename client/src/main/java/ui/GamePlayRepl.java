@@ -19,7 +19,7 @@ public class GamePlayRepl {
         this.gameID = gameID;
         this.authToken = authToken;
         this.url = url;
-        client = new GamePlayClient(url, authToken, playerColor, gameID);
+        client = new GamePlayClient(url, playerColor, authToken, gameID);
     }
 
     public void run() throws ResponseException {
@@ -31,7 +31,6 @@ public class GamePlayRepl {
         var result = "";
 
         while (!result.equals("quit")) {
-            client.printBoard();
             printPrompt();
             String line = scanner.nextLine();
 
