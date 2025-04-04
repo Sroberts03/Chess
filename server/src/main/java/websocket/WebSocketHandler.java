@@ -3,6 +3,7 @@ package websocket;
 import chess.*;
 import com.google.gson.Gson;
 import dataaccess.AuthDao;
+import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import dataaccess.UserDao;
 import model.GameData;
@@ -145,7 +146,29 @@ public class WebSocketHandler {
         }
     }
 
-    public void leave(UserGameCommand command, Session session) {
+    public void leave(UserGameCommand command, Session session) throws IOException {
+        try {
+            String username = authDao.getAuth(command.getAuthToken()).username();
+            GameData oldGameData = gameDao.getGame(command.getGameID());
+            if (oldGameData.whiteUsername() != null &&
+                    oldGameData.whiteUsername().equals(username)) {
+                GameData newGameData = new GameData(oldGameData.gameID(), null, oldGameData.blackUsername(),
+                        oldGameData.gameName(), oldGameData.game());
+                gameDao.updateGame(newGameData);
+            }
+            if (oldGameData.blackUsername() != null &&
+                    oldGameData.blackUsername().equals(username)) {
+                GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(), null,
+                        oldGameData.gameName(), oldGameData.game());
+                gameDao.updateGame(newGameData);
+            }
+            connections.removeSessionFromGame(command.getGameID(), session);
+            NotificationMessage notify = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
+                    username + " has left the game");
+            broadcastNotificationMessage(command.getGameID(), notify, null);
+        } catch (Exception ex) {
+            onError(ex, session);
+        }
     }
 
     public void resign(UserGameCommand command, Session session) {
