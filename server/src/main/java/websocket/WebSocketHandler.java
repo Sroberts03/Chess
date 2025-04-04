@@ -3,7 +3,6 @@ package websocket;
 import chess.*;
 import com.google.gson.Gson;
 import dataaccess.AuthDao;
-import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import dataaccess.UserDao;
 import model.GameData;
@@ -124,7 +123,7 @@ public class WebSocketHandler {
             sendLoadGameMessage(message, session);
             broadcastLoadGameMessage(command.getGameID(), message, session);
             NotificationMessage notifyMoveMade = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
-                    username + "made move: " + move);
+                    username + " made move: " + move);
             broadcastNotificationMessage(command.getGameID(), notifyMoveMade, session);
             if (game.isInCheckmate(game.getTeamTurn())) {
                 GameData oldGameDataCheckMate = gameDao.getGame(command.getGameID());
@@ -134,13 +133,13 @@ public class WebSocketHandler {
                         oldGameDataCheckMate.blackUsername(), oldGameData.gameName(), gameCheckMate);
                 gameDao.updateGame(newGameDataCheckMate);
                 NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
-                        game.getTeamTurn().name() + "is in checkmate. Game Over");
+                        game.getTeamTurn().name() + " is in checkmate. Game Over");
                 broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
                 sendNotificationMessage(inCheckmate,session);
             }
             else if (game.isInCheck(game.getTeamTurn())) {
                 NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
-                        game.getTeamTurn().name() + "is in check.");
+                        game.getTeamTurn().name() + " is in check.");
                 broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
                 sendNotificationMessage(inCheckmate,session);
             }
@@ -152,7 +151,7 @@ public class WebSocketHandler {
                         oldGameDataStaleMate.blackUsername(), oldGameData.gameName(), gameCheckMate);
                 gameDao.updateGame(newGameDataCheckMate);
                 NotificationMessage inCheckmate = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION,
-                        game.getTeamTurn().name() + "is in stalemate. Game over.");
+                        game.getTeamTurn().name() + " is in stalemate. Game over.");
                 broadcastNotificationMessage(command.getGameID(), inCheckmate, session);
                 sendNotificationMessage(inCheckmate,session);
             }
@@ -209,7 +208,8 @@ public class WebSocketHandler {
                 observer = true;
             }
             if (observer) {
-                throw new InvalidMoveException("Silly you can't resign, you're just watching.");
+                throw new InvalidMoveException("Silly you can't resign, you're just watching. You can (L)eave though" +
+                        "if you want.");
             }
             GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(),
                     oldGameData.blackUsername(), oldGameData.gameName(), gameOver);
