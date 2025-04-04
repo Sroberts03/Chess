@@ -161,6 +161,11 @@ public class WebSocketHandler {
         session.getRemote().sendString(gameJson);
     }
 
+    public void sendNotificationMessage(NotificationMessage message, Session session) throws IOException {
+        String gameJson = new Gson().toJson(message);
+        session.getRemote().sendString(gameJson);
+    }
+
     public void broadcastLoadGameMessage(Integer gameID, LoadGameMessage message, Session notThisSession) throws IOException {
         String gameJson = new Gson().toJson(message);
         for(Session s : connections.getSessionsForGame(gameID)){
@@ -170,11 +175,6 @@ public class WebSocketHandler {
                 }
             }
         }
-    }
-
-    public void sendNotificationMessage(NotificationMessage message, Session session) throws IOException {
-        String gameJson = new Gson().toJson(message);
-        session.getRemote().sendString(gameJson);
     }
 
     public void broadcastNotificationMessage(Integer gameID, NotificationMessage message, Session notThisSession) throws IOException {
