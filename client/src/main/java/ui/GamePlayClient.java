@@ -249,34 +249,12 @@ public class GamePlayClient implements GameHandler{
         }
         if (minusOrPlus == 1) {
             for (int i = startI; i < endI; i++) {
-                System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " " + (i + 1) + " ");
-                for (int j = 0; j < board.array.length; j++) {
-                    squareColor = printBoardHelper(board, squareColor, i, j);
-                }
-                if (squareColor.equals("Black")) {
-                    squareColor = "White";
-                }
-                else if (squareColor.equals("White")) {
-                    squareColor = "Black";
-                }
-                System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK+ " " + (i+1) + " ");
-                System.out.print(RESET_BG_COLOR + "\n");
+                squareColor = getString(board, squareColor, i);
             }
         }
         if (minusOrPlus == -1) {
             for (int i = startI; i > endI; i--) {
-                System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " " + (i + 1) + " ");
-                for (int j = 0; j < board.array.length; j++) {
-                    squareColor = printBoardHelper(board, squareColor, i, j);
-                }
-                if (squareColor.equals("Black")) {
-                    squareColor = "White";
-                }
-                else if (squareColor.equals("White")) {
-                    squareColor = "Black";
-                }
-                System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK+ " " + (i+1) + " ");
-                System.out.print(RESET_BG_COLOR + "\n");
+                squareColor = getString(board, squareColor, i);
             }
         }
         System.out.print(RESET_BG_COLOR);
@@ -286,6 +264,22 @@ public class GamePlayClient implements GameHandler{
         else if (minusOrPlus == -1) {
             beginAndEnd(numToLetMapWhite);
         }
+    }
+
+    private String getString(ChessBoard board, String squareColor, int i) {
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " " + (i + 1) + " ");
+        for (int j = 0; j < board.array.length; j++) {
+            squareColor = printBoardHelper(board, squareColor, i, j);
+        }
+        if (squareColor.equals("Black")) {
+            squareColor = "White";
+        }
+        else if (squareColor.equals("White")) {
+            squareColor = "Black";
+        }
+        System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK+ " " + (i+1) + " ");
+        System.out.print(RESET_BG_COLOR + "\n");
+        return squareColor;
     }
 
     public String help() {
