@@ -25,12 +25,13 @@ public class Repl {
                 System.out.print(SET_TEXT_COLOR_BLUE + result);
                 if (client.getGameJoined() != 0) {
                     GamePlayRepl gamePlay = new GamePlayRepl(client.getPlayerColor(), client.getGameJoined(),
-                            client.getAuthToken(), client.getServerUrl());
+                            client.getAuthToken(), client.getServerUrl(), false);
                     gamePlay.run();
                     client.setGameJoined();
                 }
                 if (client.getObservingGame() != 0) {
-                    Observer obs = new Observer(client.getObservingGame());
+                    GamePlayRepl obs = new GamePlayRepl("white", client.getObservingGame(),
+                            client.getAuthToken(), client.getServerUrl(), true);
                     obs.run();
                     client.resetObservingGame();
                 }

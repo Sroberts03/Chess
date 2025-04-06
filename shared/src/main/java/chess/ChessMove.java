@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -63,10 +65,10 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        return "ChessMove("
-                + startPosition +
-                " " + endPosition +
-                " " + promotion +
-                ')';
+        return "Start Column " + startPosition.getColumn()
+                + " Start Row " + startPosition.getRow()
+                + " End Column " + endPosition.getColumn()
+                + " End Row " + endPosition.getColumn()
+                + " Promoted to " + promotion;
     }
 }

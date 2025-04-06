@@ -20,13 +20,15 @@ public class GamePlayClient implements GameHandler{
     private final String playerColor;
     private final String authToken;
     private final Integer gameID;
+    private final boolean obs;
 
     public GamePlayClient(String serverUrl, String playerColor,
-                          String authToken, Integer gameID) {
+                          String authToken, Integer gameID, boolean obs) {
         this.serverUrl = serverUrl;
         this.playerColor = playerColor;
         this.authToken = authToken;
         this.gameID = gameID;
+        this.obs = obs;
     }
 
     public String eval(String input) {
@@ -62,16 +64,46 @@ public class GamePlayClient implements GameHandler{
         return "quit";
     }
 
+    public Map<String, Integer> letToCol() {
+        HashMap<String, Integer> blackCol = new HashMap<>();
+        blackCol.put("a", 1);
+        blackCol.put("b", 2);
+        blackCol.put("c", 3);
+        blackCol.put("d", 4);
+        blackCol.put("e", 5);
+        blackCol.put("f", 6);
+        blackCol.put("g", 7);
+        blackCol.put("h", 8);
+        return blackCol;
+    }
+
     public String makeMove(String... params) throws ResponseException {
-        int startCol = Integer.parseInt(params[0]);
+        Map<String, Integer> letToNum;
+        String startCol = params[0];
         int startRow = Integer.parseInt(params[1]);
-        int endCol = Integer.parseInt(params[2]);
+        String endCol = params[2];
         int endRow = Integer.parseInt(params[3]);
-        ChessPosition start = new ChessPosition(startRow,startCol);
-        ChessPosition end = new ChessPosition(endRow,endCol);
-        ChessMove move = new ChessMove(start,end,null);
-        ws.makeMove(move);
-        return "move made";
+        if (playerColor.equals("black")) {
+            letToNum = letToCol();
+            int startColInt = letToNum.get(startCol);
+            int endColInt = letToNum.get(endCol);
+            ChessPosition start = new ChessPosition(startRow,startColInt);
+            ChessPosition end = new ChessPosition(endRow,endColInt);
+            ChessMove move = new ChessMove(start,end,null);
+            ws.makeMove(move);
+            return "move made";
+        }
+        else if (playerColor.equals("white")) {
+            letToNum = letToCol();
+            int startColInt = letToNum.get(startCol);
+            int endColInt = letToNum.get(endCol);
+            ChessPosition start = new ChessPosition(startRow,startColInt);
+            ChessPosition end = new ChessPosition(endRow,endColInt);
+            ChessMove move = new ChessMove(start,end,null);
+            ws.makeMove(move);
+            return "move made";
+        }
+        return "bad";
     }
 
     public String resign() throws ResponseException {
@@ -117,7 +149,6 @@ public class GamePlayClient implements GameHandler{
         numToLetMap.put(8, "a");
         return numToLetMap;
     }
-
 
     private void beginAndEnd(Map<Integer, String> numMap) {
         for (int i = 0; i < 10; i++) {
@@ -237,6 +268,7 @@ public class GamePlayClient implements GameHandler{
     }
 
     private void printBoard(int startI, int endI, int minusOrPlus) {
+        System.out.print("\n");
         Map<Integer, String> numToLetMapWhite = numToLetMapWhite();
         Map<Integer, String> numToLetMapBlack = numToLetMapBlack();
         ChessBoard board = game.getBoard();
@@ -268,8 +300,15 @@ public class GamePlayClient implements GameHandler{
 
     private String getString(ChessBoard board, String squareColor, int i) {
         System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " " + (i + 1) + " ");
-        for (int j = 0; j < board.array.length; j++) {
-            squareColor = printBoardHelper(board, squareColor, i, j);
+        if (playerColor.equals("white")) {
+            for (int j = 0; j < board.array.length; j++) {
+                squareColor = printBoardHelper(board, squareColor, i, j);
+            }
+        }
+        if (playerColor.equals("black")) {
+            for (int j = board.array.length - 1; j > -1; j--) {
+                squareColor = printBoardHelper(board, squareColor, i, j);
+            }
         }
         if (squareColor.equals("Black")) {
             squareColor = "White";
@@ -283,14 +322,24 @@ public class GamePlayClient implements GameHandler{
     }
 
     public String help() {
-        System.out.print("""
-                press any key for help menu
-                L -> leave game
-                RD -> Redraw Board
-                M <Start Column> <Start Row> <End Column> <End Row> -> make move to column and row
-                R -> Resign game
-                H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
-                """);
+        if (!obs) {
+            System.out.print("""
+                    press any key for help menu
+                    L -> leave game
+                    RD -> Redraw Board
+                    M <Start Column> <Start Row> <End Column> <End Row> -> make move to column and row
+                    R -> Resign game
+                    H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
+                    """);
+        }
+        else if (obs) {
+            System.out.print("""
+                    press any key for help menu
+                    L -> leave game
+                    RD -> Redraw Board
+                    H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
+                    """);
+        }
         return "help";
     }
 

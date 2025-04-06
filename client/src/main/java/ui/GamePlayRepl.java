@@ -13,13 +13,15 @@ public class GamePlayRepl {
     private final Integer gameID;
     private final String authToken;
     private final String url;
+    private final boolean obs;
 
-    public GamePlayRepl(String playerColor, Integer gameID, String authToken, String url) {
+    public GamePlayRepl(String playerColor, Integer gameID, String authToken, String url, boolean obs) {
         this.playerColor = playerColor;
         this.gameID = gameID;
         this.authToken = authToken;
         this.url = url;
-        client = new GamePlayClient(url, playerColor, authToken, gameID);
+        this.obs = obs;
+        client = new GamePlayClient(url, playerColor, authToken, gameID, obs);
     }
 
     public void run() throws ResponseException {
