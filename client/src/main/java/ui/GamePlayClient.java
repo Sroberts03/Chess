@@ -352,12 +352,12 @@ public class GamePlayClient implements GameHandler{
     @Override
     public void onError(ErrorMessage message) {
         String mes = message.getErrorMessage();
-        System.out.print(mes);
+        System.out.print("\n" + SET_TEXT_COLOR_BLUE + mes + "\n" + RESET_TEXT_COLOR);
     }
 
     @Override
     public void onNotifiy(NotificationMessage message) {
         String mes = message.getMessage();
-        System.out.print(mes);
+        System.out.print("\n" + SET_TEXT_COLOR_BLUE + mes + "\n" + RESET_TEXT_COLOR);
     }
 }
