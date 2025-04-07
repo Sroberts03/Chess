@@ -104,7 +104,7 @@ public class PawnMoveCalculator {
             }
         }
         //promotion
-        singularPromotion(startRow, startColumn, myPosition, moves, teamColor);
+        singularPromotion(startRow, startColumn, myPosition, moves, teamColor, board);
     }
 
     public static boolean capturePosition(int row, int column, ChessGame.TeamColor teamColor, ChessBoard board) {
@@ -129,14 +129,18 @@ public class PawnMoveCalculator {
 
     public static void singularPromotion(int startRow, int startColumn,
                                          ChessPosition myPosition, ArrayList<ChessMove> moves,
-                                         ChessGame.TeamColor teamColor) {
+                                         ChessGame.TeamColor teamColor, ChessBoard board) {
         if (startRow + 1 == 7 && teamColor == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(startRow + 2, startColumn + 1);
-            promotion(myPosition, newPosition, moves);
+            if (board.getPiece(newPosition) == null) {
+                promotion(myPosition, newPosition, moves);
+            }
         }
         if (startRow - 1 == 0 && teamColor == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(startRow, startColumn + 1);
-            promotion(myPosition, newPosition, moves);
+            if (board.getPiece(newPosition) == null) {
+                promotion(myPosition, newPosition, moves);
+            }
         }
     }
 }

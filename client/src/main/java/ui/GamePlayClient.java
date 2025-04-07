@@ -82,27 +82,67 @@ public class GamePlayClient implements GameHandler{
         int startRow = Integer.parseInt(params[1]);
         String endCol = params[2];
         int endRow = Integer.parseInt(params[3]);
+        ChessPiece promotion = getChessPiece(params, "move");
+        ChessMove move;
         if (playerColor.equals("black")) {
-            letToNum = letToCol();
-            int startColInt = letToNum.get(startCol);
-            int endColInt = letToNum.get(endCol);
-            ChessPosition start = new ChessPosition(startRow,startColInt);
-            ChessPosition end = new ChessPosition(endRow,endColInt);
-            ChessMove move = new ChessMove(start,end,null);
-            ws.makeMove(move);
-            return "move made";
+            return makeMoveHelper(startCol, startRow, endCol, endRow, promotion);
         }
         else if (playerColor.equals("white")) {
-            letToNum = letToCol();
-            int startColInt = letToNum.get(startCol);
-            int endColInt = letToNum.get(endCol);
-            ChessPosition start = new ChessPosition(startRow,startColInt);
-            ChessPosition end = new ChessPosition(endRow,endColInt);
-            ChessMove move = new ChessMove(start,end,null);
-            ws.makeMove(move);
-            return "move made";
+            return makeMoveHelper(startCol, startRow, endCol, endRow, promotion);
         }
         return "bad";
+    }
+
+    private String makeMoveHelper(String startCol, int startRow, String endCol, int endRow, ChessPiece promotion) throws ResponseException {
+        Map<String, Integer> letToNum;
+        ChessMove move;
+        letToNum = letToCol();
+        int startColInt = letToNum.get(startCol);
+        int endColInt = letToNum.get(endCol);
+        ChessPosition start = new ChessPosition(startRow,startColInt);
+        ChessPosition end = new ChessPosition(endRow,endColInt);
+        if (promotion != null) {
+            move = new ChessMove(start, end, promotion.getPieceType());
+        }
+        else {
+            move = new ChessMove(start, end, null);
+        }
+        ws.makeMove(move);
+        return "move made";
+    }
+
+    private ChessPiece getChessPiece(String[] params, String whereFrom) {
+        ChessPiece promotion = null;
+        String pro;
+        if ((params.length == 5 && whereFrom.equals("move"))
+                || params.length == 3 && whereFrom.equals("highlight")) {
+            if (whereFrom.equals("move")) {
+                pro = params[4];
+            }
+            else {
+                pro = params[2];
+            }
+            ChessGame.TeamColor teamColor;
+            if (playerColor.equals("white")) {
+                teamColor = ChessGame.TeamColor.WHITE;
+            }
+            else {
+                teamColor = ChessGame.TeamColor.BLACK;
+            }
+            if (pro.equalsIgnoreCase("queen")) {
+                promotion = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
+            }
+            else if (pro.equalsIgnoreCase("rook")) {
+                promotion = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+            }
+            else if (pro.equalsIgnoreCase("knight")) {
+                promotion = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+            }
+            else if (pro.equalsIgnoreCase("bishop")) {
+                promotion = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+            }
+        }
+        return promotion;
     }
 
     public String resign() throws ResponseException {
@@ -114,18 +154,20 @@ public class GamePlayClient implements GameHandler{
         Map<String, Integer> letToNum = letToCol();
         int row = Integer.parseInt(params[1]);
         int col = letToNum.get(params[0]);
+        ChessPiece chessPiece = getChessPiece(params, "highlight");
         ChessPosition chessPosition = new ChessPosition(row,col);
         Collection<ChessMove> validMoves = game.validMoves(chessPosition);
         if (playerColor.equals("white")) {
-            highlightBoard(validMoves, -1, chessPosition);
+            highlightBoard(validMoves, -1, chessPosition, chessPiece);
         }
         else if (playerColor.equals("black")) {
-            highlightBoard(validMoves, 1, chessPosition);
+            highlightBoard(validMoves, 1, chessPosition, chessPiece);
         }
         return "highlight";
     }
 
-    public void highlightBoard(Collection<ChessMove> validMoves, int minusOrPlus, ChessPosition startPos) {
+    public void highlightBoard(Collection<ChessMove> validMoves, int minusOrPlus,
+                               ChessPosition startPos, ChessPiece promotion) {
         Map<Integer, String> numToLetMapWhite = numToLetMapWhite();
         Map<Integer, String> numToLetMapBlack = numToLetMapBlack();
         ChessBoard board = game.getBoard();
@@ -138,12 +180,14 @@ public class GamePlayClient implements GameHandler{
         }
         if (minusOrPlus == 1) {
             for (int i = 0; i < board.array.length; i++) {
-                squareColor = getStringHighlight(board, squareColor, i, validMoves, startPos);
+                squareColor = getStringHighlight(board, squareColor,
+                        i, validMoves, startPos, promotion);
             }
         }
         if (minusOrPlus == -1) {
             for (int i = board.array.length - 1; i > -1; i--) {
-                squareColor = getStringHighlight(board, squareColor, i, validMoves, startPos);
+                squareColor = getStringHighlight(board, squareColor,
+                        i, validMoves, startPos, promotion);
             }
         }
         System.out.print(RESET_BG_COLOR);
@@ -156,16 +200,19 @@ public class GamePlayClient implements GameHandler{
     }
 
     private String getStringHighlight(ChessBoard board, String squareColor, int i,
-                                      Collection<ChessMove> validMoves, ChessPosition startPos) {
+                                      Collection<ChessMove> validMoves, ChessPosition startPos,
+                                      ChessPiece promotion) {
         System.out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLACK + " " + (i + 1) + " ");
         if (playerColor.equals("white")) {
             for (int j = 0; j < board.array.length; j++) {
-                squareColor = highlightBoardHelper(board, squareColor, i, j, validMoves, startPos);
+                squareColor = highlightBoardHelper(board, squareColor, i, j,
+                        validMoves, startPos, promotion);
             }
         }
         if (playerColor.equals("black")) {
             for (int j = board.array.length - 1; j > -1; j--) {
-                squareColor = highlightBoardHelper(board, squareColor, i, j, validMoves, startPos);
+                squareColor = highlightBoardHelper(board, squareColor, i, j,
+                        validMoves, startPos, promotion);
             }
         }
         if (squareColor.equals("Black")) {
@@ -180,10 +227,17 @@ public class GamePlayClient implements GameHandler{
     }
 
     private String highlightBoardHelper(ChessBoard board, String squareColor, int i, int j,
-                                        Collection<ChessMove> validMoves, ChessPosition startPos) {
+                                        Collection<ChessMove> validMoves, ChessPosition startPos,
+                                        ChessPiece promotion) {
         ChessPosition pos = new ChessPosition(i + 1, j + 1);
         ChessPiece piece = board.getPiece(pos);
-        ChessMove move = new ChessMove(startPos, pos, null);
+        ChessMove move;
+        if (promotion != null) {
+            move = new ChessMove(startPos, pos, promotion.getPieceType());
+        }
+        else {
+            move = new ChessMove(startPos, pos, null);
+        }
         if (squareColor.equals("White")) {
             pieceCheckerSquareWhite(piece, validMoves, move);
             squareColor = "Black";
@@ -353,7 +407,7 @@ public class GamePlayClient implements GameHandler{
                 }
                 if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
                     if (validMoves.contains(move)) {
-                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " R ");
+                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " N ");
                     }
                     else {
                         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " N ");
@@ -361,7 +415,7 @@ public class GamePlayClient implements GameHandler{
                 }
                 if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
                     if (validMoves.contains(move)) {
-                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " R ");
+                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " B ");
                     }
                     else {
                         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " B ");
@@ -369,7 +423,7 @@ public class GamePlayClient implements GameHandler{
                 }
                 if (piece.getPieceType() == ChessPiece.PieceType.KING) {
                     if (validMoves.contains(move)) {
-                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " R ");
+                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " K ");
                     }
                     else {
                         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " K ");
@@ -377,7 +431,7 @@ public class GamePlayClient implements GameHandler{
                 }
                 if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
                     if (validMoves.contains(move)) {
-                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " R ");
+                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " Q ");
                     }
                     else {
                         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " Q ");
@@ -385,7 +439,7 @@ public class GamePlayClient implements GameHandler{
                 }
                 if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
                     if (validMoves.contains(move)) {
-                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " R ");
+                        System.out.print(SET_BG_COLOR_YELLOW + SET_TEXT_COLOR_BLUE + " P ");
                     }
                     else {
                         System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ");
@@ -618,21 +672,21 @@ public class GamePlayClient implements GameHandler{
 
     public String help() {
         if (!obs) {
-            System.out.print("""
+            System.out.print(SET_TEXT_COLOR_GREEN + """
                     press any key for help menu
                     L -> leave game
                     RD -> Redraw Board
-                    M <Start Column> <Start Row> <End Column> <End Row> -> make move to column and row
+                    M <Start Column> <Start Row> <End Column> <End Row> <Promotion Piece if applicable> -> make move to column and row
                     R -> Resign game
-                    H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
+                    H <Column> <Row> <Promotion Piece if applicable> -> Highlight Possible Moves of Piece at Column and Row
                     """);
         }
         else if (obs) {
-            System.out.print("""
+            System.out.print(SET_TEXT_COLOR_GREEN + """
                     press any key for help menu
                     L -> leave game
                     RD -> Redraw Board
-                    H <Column> <Row> -> Highlight Possible Moves of Piece at Column and Row
+                    H <Column> <Row> <Promotion Piece if applicable> -> Highlight Possible Moves of Piece at Column and Row
                     """);
         }
         return "help";

@@ -47,6 +47,19 @@ public class ChessMove {
         return promotion;
     }
 
+    private Map<Integer, String> columnLetter() {
+        Map<Integer,String> columnLetter = new HashMap<>();
+        columnLetter.put(1, "a");
+        columnLetter.put(2, "b");
+        columnLetter.put(3, "c");
+        columnLetter.put(4, "d");
+        columnLetter.put(5, "e");
+        columnLetter.put(6, "f");
+        columnLetter.put(7, "g");
+        columnLetter.put(8, "h");
+        return columnLetter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -65,10 +78,8 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        return "Start Column " + startPosition.getColumn()
-                + " Start Row " + startPosition.getRow()
-                + " End Column " + endPosition.getColumn()
-                + " End Row " + endPosition.getColumn()
-                + " Promoted to " + promotion;
+        Map<Integer, String> columnLetter = columnLetter();
+        return columnLetter.get(startPosition.getColumn()) + startPosition.getRow()
+                + " -> " + columnLetter.get(endPosition.getColumn()) + endPosition.getRow();
     }
 }
