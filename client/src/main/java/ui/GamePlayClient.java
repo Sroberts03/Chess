@@ -76,7 +76,19 @@ public class GamePlayClient implements GameHandler{
         return blackCol;
     }
 
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     public String makeMove(String... params) throws ResponseException {
+        if (!isNumeric(params[1]) && !isNumeric(params[3])) {
+            System.out.print("Bad Request: Needed order <Start Column> <Start Row> <End Column> <End Row> <Promotion Piece if applicable>");
+        }
         Map<String, Integer> letToNum;
         String startCol = params[0];
         int startRow = Integer.parseInt(params[1]);
@@ -146,7 +158,16 @@ public class GamePlayClient implements GameHandler{
     }
 
     public String resign() throws ResponseException {
-        ws.resign();
+        Scanner scanner = new Scanner(System.in);
+        var result = "";
+        System.out.print("Are you sure you want to resign? (y -> yes n -> no) >>");
+        result = scanner.nextLine();
+        if (result.equalsIgnoreCase("y")) {
+            ws.resign();
+        }
+        else if (result.equalsIgnoreCase("n")) {
+            return "neverMind";
+        }
         return "resigned";
     }
 
