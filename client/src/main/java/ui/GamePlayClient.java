@@ -160,15 +160,21 @@ public class GamePlayClient implements GameHandler{
     public String resign() throws ResponseException {
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        System.out.print("Are you sure you want to resign? (y -> yes n -> no) >>");
+        System.out.print(SET_TEXT_COLOR_GREEN +
+                        "Are you sure you want to resign?\n (y -> yes n -> no)\n >> ");
         result = scanner.nextLine();
-        if (result.equalsIgnoreCase("y")) {
-            ws.resign();
+        while (true) {
+            if (result.equalsIgnoreCase("y")) {
+                ws.resign();
+                return "resigned";
+            } else if (result.equalsIgnoreCase("n")) {
+                return "neverMind";
+            } else {
+                System.out.print(SET_TEXT_COLOR_RED +
+                                "Not a valid input:\n y -> yes or n -> no\n >> ");
+                result = scanner.nextLine();
+            }
         }
-        else if (result.equalsIgnoreCase("n")) {
-            return "neverMind";
-        }
-        return "resigned";
     }
 
     public String highlight(String... params) {
@@ -722,7 +728,7 @@ public class GamePlayClient implements GameHandler{
     @Override
     public void onError(ErrorMessage message) {
         String mes = message.getErrorMessage();
-        System.out.print("\n" + SET_TEXT_COLOR_BLUE + mes + "\n" + RESET_TEXT_COLOR);
+        System.out.print("\n" + SET_TEXT_COLOR_RED + mes + "\n" + RESET_TEXT_COLOR);
     }
 
     @Override
